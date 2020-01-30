@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="cinema">
+<meta name="author" content="Sandra Stojanovic sf10/2016">
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/f.js"></script>
+<script src="js/users.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/jquery-ui.css">
+<title>Cinema S</title>
+
+
+
+</head>
+
+<body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-light" style="background-color: black;">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">Cinema</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<!-- <li class="myProfileButton">
+				    		<button id="goToProfile" type="button" class="btn btn-link btn-lg login">
+	                  		My profile</button>
+	                  </li> -->
+				<!-- <li id="logoutButton">
+				    	<form action="LogoutServlet">
+				    		<button type="submit" class="btn btn-link btn-lg login">
+	                  		Logout</button>
+	                  	</form>
+	                  </li> -->
+				<li><a class="nav-link" id="liMovies" href="movies.html">Movies</a></li>
+				<li>
+				<li><a class="nav-link" id="liUsers" href="users.html">Users</a></li>
+				<!-- <li><a class="nav-link" href="#myModal" class="trigger-btn" id="liLogin"
+					data-toggle="modal">Login</a></li> -->
+				<li id="liMyProfile">
+				    		<button id="goToProfile"type="submit" class="btn btn-link btn-lg login">
+	                  		<span class="glyphicon glyphicon-user"></span>My profile</button>
+	                  </li>
+				<li id="logoutButton">
+					<form action="LogoutServlet">
+						<button type="submit" class="btn btn-link btn-lg login">Logout</button>
+					</form>
+				</li>
+			<!-- 	<li><a class="nav-link" id="liSignUp" href="registration.html">SignUp</a></li> -->
+
+
+			</ul>
+		</div>
+	</nav>
+	<!-- Login Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-sm">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Login to your account</h4>
+				</div>
+				<div class="modal-body">
+					<form id="loginForm">
+						<div class="form-group">
+							<label class="control-label" for="inputUsername">Username</label>
+							<input type="text" id="inputUsername" name="username"
+								placeholder="Username">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="inputPassword">Password</label>
+							<input type="password" id="inputPassword" name="password"
+								placeholder="Password">
+						</div>
+						<div class="modal-footer">
+							<button id="loginButton" type="submit" name="login"
+								class="btn btn-success">Login</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Tabela korisnika -->
+	<div class="container bootstrap snippet">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="main-box">
+					<p>
+						<b>USERS</b>
+					</p>
+					<p>
+					<input type="text" id="inputSearch"
+				placeholder="">
+				
+					<button type="submit" id="submitSearch"><span class="glyphicon glyphicon-search"></span></button>
+					 <select id="searchSelect">
+		      			<option selected hidden>search by</option>
+		      			<option value="username">username</option>
+		      			<option value="role">role</option>
+		      			
+		      	</select></p>
+		      	 
+					<div class="table-responsive">
+						<table class="table user-list">
+							<thead>
+								<tr>
+
+									<th><span>username</span></th>
+									<th><span>password</span></th>
+									<th><span>datetime</span></th>
+									<th><span>role</span></th>
+									<th>&nbsp;</th>
+									<th><div class="btn-group">
+							  <button type="button" class="btn btn-default">Sort</button>
+							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+							  <span class="caret"></span> </button>
+								  <ul class="dropdown-menu" role="menu">
+								      <li><a id="usernameAsc_btn" role="button">username<span class="glyphicon glyphicon-arrow-up"></span></a></li>
+								      <li><a id="usernameDesc_btn" role="button">username<span class="glyphicon glyphicon-arrow-down"></span></a></li>
+								     <li><a id="roleAsc_btn" role="button">role<span class="glyphicon glyphicon-arrow-up"></span></a></li>
+								      <li><a id="roleDesc_btn" role="button">role<span class="glyphicon glyphicon-arrow-down"></span></a></li>
+								  </ul>
+						</div></th>
+									  <th>&nbsp;</th>
+ 
+								</tr>
+							</thead>
+							<tbody id="usersDiv">
+								<!--  <tr>
+			                        <td>
+											<img src="img/user.png" alt="User" width="50" height="50">
+									  </td>
+								
+			                            <td>
+			                                
+			                                	<a href="link ka profilu"class="user-link">Full name 1</a>
+			                                
+			                            </td>
+			                            <td>
+			                            </td>
+			                            <td>
+			                            </td>
+			                            
+			                        </tr> -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+</body>
+</html>

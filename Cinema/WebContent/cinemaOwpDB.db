@@ -1,0 +1,124 @@
+create table auditorium (
+    id integer primary key,
+    name varchar(20) not null
+);
+insert into auditorium (name) values ('sala1');
+insert into auditorium (name) values ('sala2');
+insert into auditorium (name) values ('sala3');
+insert into auditorium (name) values ('sala4');
+
+select * from auditorium;
+
+
+create table movie(
+    id integer primary key,
+    title varchar(100) not null,
+    directors varchar(256) not null,
+    actors varchar(256) not null,
+    genre varchar(150) not null,
+    duration integer not null,
+    distributor varchar(150) not null,
+    country varchar(60) not null,
+    year integer not null,
+    description varchar(512) not null
+    
+);
+insert into movie (title, directors, actors, genre, duration, distributor, country, year, description) values ('Awareness of stupidity', 'Nela i Sandra', 'Nela,Sandra,Radovan,Milos', 'tragicomedy', 2, 'Blitz','Serbia', 2020, 'Funny storie');
+insert into movie (title, directors, actors, genre, duration, distributor, country, year, description) values ('Awareness of stupidity2', 'Nela i Sandra', 'Nela,Sandra,Radovan,Milos', 'tragicomedy', 2, 'Blitz','Serbia', 2020, 'Funny storie');
+insert into movie (title, directors, actors, genre, duration, distributor, country, year, description) values ('Awareness of stupidity3', 'Nela i Sandra', 'Nela,Sandra,Radovan,Milos', 'tragicomedy', 2, 'Blitz','Serbia', 2020, 'Funny storie');
+
+
+create table screening(
+    id integer primary key,
+    movieId integer not null,
+    screenTypeId integer not null,
+    auditoriumId integer not null,
+    datetime text not null,
+    ticketPrice real not null,
+    user varchar(10) not null,
+    foreign key(movieId) references movie(id) on delete restrict,
+    foreign key(auditoriumId) references auditorium(id) on delete restrict,
+    foreign key(screenTypeId) references screenType(id) on delete restrict,    
+    foreign key(user) references user(username) on delete restrict
+);
+create index username on screening(user); 
+
+
+insert into screening (movieId, screentypeId, auditoriumId, datetime, ticketPrice, user) values (1,1,1,'2020-01-21 20:28:54.111', 550, 'a');
+insert into screening (movieId, screentypeId, auditoriumId, datetime, ticketPrice, user) values (2,2,2,'2020-01-21 20:28:54.111', 250, 'a');
+insert into screening (movieId, screentypeId, auditoriumId, datetime, ticketPrice, user) values (3,3,3,'2020-01-21 20:28:54.111', 550, 'a');
+
+select * from screening;
+
+delete from screening where id=4;
+
+create table screenType (
+    id integer primary key,
+    name varchar(5) not null
+);
+
+
+select * from screenType;
+
+insert into screenType (name) values ('2D');
+insert into screenType (name) values ('3D');
+insert into screenType (name) values ('4D');
+insert into screenType (name) values ('6D');
+
+create table audScrType (
+    audScrTypeId integer primary key,
+    auditoriumId integer  not null,
+    screenTypeId integer not null,
+    foreign key(auditoriumId) references auditorium(id) on delete restrict,
+    foreign key(screenTypeId) references screenType(id) on delete restrict 
+);
+select scrT.* from screenType scrT left outer join audScrType a on scrT.id = a.screenTypeId where a.auditoriumId = 3;
+
+select scr.* from audScrType a join screenType scr on a.screenTypeId=scr.id where a.auditoriumId = 1;
+insert into audScrType (auditoriumId, screenTypeId) values (1,1);
+insert into audScrType (auditoriumId, screenTypeId) values (1,2);
+insert into audScrType (auditoriumId, screenTypeId) values (3,3);
+insert into audScrType (auditoriumId, screenTypeId) values (1,3);
+
+
+create table seat(
+    seatNO integer not null,
+    auditoriumId integer not null,
+    foreign key(auditoriumId) references auditorium(id) on delete restrict
+);
+
+create table ticket(
+    id integer primary key,
+    screeningId integer not null,
+    seatId integer not null,
+    datetime text not null,
+    user  varchar(10) not null,
+    foreign key(screeningId) references screening(id) on delete restrict,
+    foreign key(seatId) references seat(id) on delete restrict,
+    foreign key(user) references user(username) on delete restrict
+);
+
+
+create table user(
+    username varchar(10) not null, 
+    password varchar(10) not null, 
+    datetime text not null,
+    role varchar(5) not null default 'USER',
+    primary key(username)
+    
+);
+
+
+INSERT INTO user (username, password, datetime, role) VALUES ('a', 'a', '2020-01-21 20:28:54.111', 'ADMIN');
+INSERT INTO user (username, password, datetime, role) VALUES ('b', 'b', '2000-01-21 20:28:54.111', 'USER');
+INSERT INTO user (username, password, datetime, role) VALUES ('s', 's', '2000-01-21 20:28:54.111', 'USER');
+
+INSERT INTO user (username, password, datetime, role) VALUES ('a', 'a', '28-01-2020 16:541:03', 'ADMIN');
+INSERT INTO user (username, password, datetime, role) VALUES ('b', 'b', '28-01-2020 16:541:03', 'USER');
+INSERT INTO user (username, password, datetime, role) VALUES ('s', 's', '28-01-2020 16:541:03', 'USER');
+
+select * from user;
+
+delete from user where id = 7;
+
+select * from movie;
