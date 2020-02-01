@@ -12,7 +12,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/f.js"></script>
 <script src="js/login.js"></script>
-<script src="js/screening.js"></script>
+<script src="js/screenings.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/jquery-ui.css">
 <title>Cinema S</title>
@@ -21,37 +21,52 @@
 
 
 <style>
-#button1 {
-	border: 2px solid;
-}
-
-#button2 {
-	border: 2px solid;
-}
-
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
- .content1 {
-         margin-top:12px;
-         margin-left: 270px;
-       
-         
-     }
-    
- /* .movie-poster {
-      border-radius: 5px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      border: 1px solid transparent; }
-     .movie-poster img {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        -webkit-transition: .3s ease;
-                transition: .3s ease; }
-  */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+  margin-left: 75px;
+  margin-right: 25px;
+  margin-bottom: 50px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+
 </style>
 </head>
 
@@ -117,38 +132,70 @@
 	</div>
 
 
+		<div class="row">
+  <div class="column">
+    <div class="card">
+      <h3>Card 1</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <h3>Card 2</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+   <div class="column">
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+   <div class="column">
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+   <div class="column">
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+   <div class="column">
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <h3>Card 4</h3>
+      <p>Some text</p>
+      <p>Some text</p>
+    </div>
+  </div>
+</div>
+
 	
-      <div class="content1">
-		<div class="row" id="row">
-			<div class="col-md-4" id="div2">
-				<figure class="movie-poster">
-					<img src="img/singleScr.jpg" alt="#">
-				</figure>
-			</div>
-			<!--  <div class="col-md-6">
-                    <h2 class="movie-title">The Croods</h2>
-                    <div class="movie-summary">
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. </p>
 
-                        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit sed.</p>
-                    </div>
-                    <ul class="movie-meta">
-                        <li><strong>Rating:</strong> 
-                            <div class="star-rating" title="Rated 4.00 out of 5"><span style="width:80%"><strong class="rating">4.00</strong> out of 5</span></div>
-                        </li>
-                        <li><strong>Length:</strong> 98 min</li>
-                        <li><strong>Premiere:</strong> 22 March 2013 (USA)</li>
-                        <li><strong>Category:</strong> Animation/Adventure/Comedy</li>
-                    </ul>
-
-                    <ul class="starring">
-                        <li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>
-                        <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)</li>
-                        <li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>
-                    </ul>
-                </div> -->
-		</div>
-		</div>
 
 </body>
 

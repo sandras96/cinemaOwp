@@ -99,52 +99,7 @@ public class ScreenTypeDAO {
 
 	
 	
-	public static List<ScreenType> getAllScreenTypes(Integer auditoriumId) throws Exception {
-		Connection conn = ConnectionManager.getConnection();
-		List<ScreenType> screenTypes = new ArrayList<>();
-
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			String query = "select scr.* from audScrType a join screenType scr on a.screenTypeId=scr.id where a.auditoriumId = ? ";
-
-			ps = conn.prepareStatement(query);
-			ps.setInt(1, auditoriumId);
-			System.out.println(ps);
-
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				int index = 1;
-				Integer screenTypeId = rs.getInt(index++);
-				String name = rs.getString(index++);
-
-				ScreenType screenType = new ScreenType(screenTypeId, name);
-				screenTypes.add(screenType);
-
-			}
-		} finally {
-			try {
-				ps.close();
-			} catch (Exception ex1) {
-				ex1.printStackTrace();
-			}
-			try {
-				rs.close();
-			} catch (Exception ex1) {
-				ex1.printStackTrace();
-			}
-			try {
-				conn.close();
-			} catch (Exception ex1) {
-				ex1.printStackTrace();
-			}
-		}
-
-		return screenTypes;
-
-	}
+	
 
 
 }

@@ -38,7 +38,7 @@ $(document).ready(function(e){
 	
 	function addMovie(movie, loggedInUser){
 		
-		var title = $('<div class="col-md-8"><h2 class="movie-title">'+movie.title+'</h2>');
+		var title = $('<div class="col-md-8"><h2 class="movie-title">'+movie.title+'</h2></div>');
 		var description = $('<div class="movie-summary"><p>'+movie.description+' </p></div>');
 		var data = $('<ul class="movie-meta">'
 				+'<li><strong>Directors:</strong>'+movie.directors+'</li>'

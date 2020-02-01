@@ -32,7 +32,7 @@ public class ScreeningDAO {
 				Movie movie = MovieDAO.getById(rs.getInt(index++));
 				ScreenType screenType = ScreenTypeDAO.getById(rs.getInt(index++));
 				Auditorium auditorium = AuditoriumDAO.getById(rs.getInt(index++));
-				Date datetime = rs.getDate(index++);
+				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
 				Screening screening = new Screening(screeningId, movie, screenType, auditorium, datetime, ticketPrice,user);
@@ -115,7 +115,8 @@ public class ScreeningDAO {
 			ps.setInt(index++, screening.getMovie().getId());
 			ps.setInt(index++, screening.getScreentype().getId());
 			ps.setInt(index++, screening.getAuditorium().getId());
-			ps.setDate(index++, new java.sql.Date(screening.getDatetime().getTime()));
+			ps.setString(index++, FormatDate.formatDate(screening.getDatetime()));
+			ps.setDouble(index++, screening.getTicketPrice());
 			ps.setString(index++, screening.getUser().getUsername());
 			
 
@@ -161,5 +162,8 @@ public class ScreeningDAO {
 			}
 		}
 	}
+	
+	
+	
 
 }
