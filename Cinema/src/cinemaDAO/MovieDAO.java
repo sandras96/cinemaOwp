@@ -7,19 +7,81 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Movie;
+import model.ScreenType;
 import model.User;
 
 public class MovieDAO {
 	
 	public static List<Movie> getAll() throws Exception {
+
+		Connection conn = ConnectionManager.getConnection();
+		List<Movie> movies = new ArrayList<>();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query = "select * from movie";
+			ps = conn.prepareStatement(query);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int index = 1;
+				Integer movieId = rs.getInt(index++);
+				String title = rs.getString(index++);
+				String directors = rs.getString(index++);
+				String actors = rs.getString(index++);
+				String genre = rs.getString(index++);
+				Integer duration = rs.getInt(index++);
+				String distributor = rs.getString(index++);
+				String country = rs.getString(index++);
+				Integer year = rs.getInt(index++);
+				String description = rs.getString(index++);
+				boolean deleted = rs.getBoolean(index++);
+
+				Movie movie = new Movie(movieId, title, directors, actors, genre, duration, distributor, country, year,
+						description, deleted);
+				movies.add(movie);
+			}
+		} finally {
+			try {
+				ps.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+			try {
+				rs.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+			try {
+				conn.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+		}
+		return movies;
+
+	}
+	public static List<Movie> getAllParam(String titleParam, String genreParam, String distributorParam, String countryParam) throws Exception {
+		
 		Connection conn = ConnectionManager.getConnection();
 		List<Movie> movies = new ArrayList<Movie>();
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "select * from movie where deleted = 0";
+			String query = "select * from movie where title like ?"+
+												" and genre like ? "+
+												 "and distributor like ?"+
+												 " and country like ?"+
+												 " and deleted = 0;"  ;
+			
 			ps = conn.prepareStatement(query);
+			ps.setString(1, titleParam);
+			ps.setString(2, genreParam);
+			ps.setString(3, distributorParam);
+			ps.setString(4, countryParam);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {

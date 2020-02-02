@@ -43,13 +43,18 @@ public class Movies2Servlet extends HttpServlet {
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		List<Movie> movies = new ArrayList<>();
 		
-		
+		String titleSearch = Util.createParam(request.getParameter("titleSearch"));
+		String genreSearch = Util.createParam(request.getParameter("genreSearch"));
+	//	String durationSearch = Util.createParam(request.getParameter("durationSearch"));
+		String distributorSearch = Util.createParam(request.getParameter("distributorSearch"));
+		String countrySearch = Util.createParam(request.getParameter("countrySearch"));
+	//	String yearSearch = Util.createParam(request.getParameter("yearSearch"));
 		
 		String message = "";
 		String status = "";
 		
 		try {
-			movies = MovieDAO.getAll();
+			movies = MovieDAO.getAllParam(titleSearch, genreSearch, distributorSearch, countrySearch);
 			
 			message="uspesno";
 			status = "success";

@@ -91,7 +91,7 @@ public class ScreeningDAO {
 				Movie movie = MovieDAO.getById(rs.getInt(index++));
 				ScreenType screenType = ScreenTypeDAO.getById(rs.getInt(index++));
 				Auditorium auditorium = AuditoriumDAO.getById(rs.getInt(index++));
-				Date datetime = rs.getDate(index++);
+				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
 				boolean deleted = rs.getBoolean(index++);

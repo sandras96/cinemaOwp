@@ -28,8 +28,33 @@
 	border: 2px solid;
 }
 
-.main {
-	width: 50%;
+
+
+
+#myTable {
+	border-collapse: collapse;
+	width: 50px;
+	border: 1px solid #ddd;
+	font-size: 18px;
+	margin: auto;
+	margin-block-end: 200px;
+}
+
+#myTable th, #myTable td {
+	text-align: center;
+	padding: 12px;
+}
+
+#myTable tr {
+	border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+	background-color: #f1f1f1;
+}
+
+#scrl {
+	margin-left: 270px;
 }
 </style>
 
@@ -102,22 +127,10 @@
 		<br /> <br />
 		<!--Header -->
 		<header>
-			<h4 class="display-6">CINEMA S MOVIES</h4>
-
-
+			<h4 class="display-6">CINEMA S MOVIES <button class="glyphicon glyphicon-sort"type="button" class="btn btn-default"></button>
+			<button class="glyphicon glyphicon-plus" id="button2" type="button" class="btn btn-default"
+				data-toggle="modal" data-target="#createMovie1"></button></h4>
 		</header>
-		<div class="main">
-
-			<!-- Actual search box -->
-			<div class="form-group has-search">
-
-				<input type="text" class="form-control" placeholder="Search">
-
-			</div>
-			<button id="button1" type="button" class="btn btn-default">sort</button>
-			&nbsp;
-			<button id="button2" type="button" class="btn btn-default"
-				data-toggle="modal" data-target="#createMovie1">+</button>
 
 			<div id="createMovie1" class="modal fade" role="dialog">
 				<div class="modal-dialog">
@@ -175,9 +188,9 @@
 		<br />
 		<br />
 		<!-- Page Features -->
-		<div class="row text-center" id="movieCard">
+		<!-- <div class="row text-center" id="movieCard">
 
-			<div class="col-lg-3 col-md-6 mb-4">
+			<div class="col-lg-3 col-md-6 mb-4"> -->
 				<!-- <div class="card h-100">
           <img class="card-img-top" src="http://placehold.it/500x325" alt="">
           <div class="card-body">
@@ -188,14 +201,42 @@
             <a href="#" class="btn btn-primary">Find Out More!</a>
           </div>
         </div> -->
-			</div>
+        
+        
+<table id="myTable">
+		<tr class="header">
+			<th>Title<span><input id="titleSearch" type="text"></span></th>
+			<th>Genre<span><input id="genreSearch" type="text"></span></th>
+			<th>Duration<span><input id="durationSearch" type="text"></span></th>
+			<th>Distributor<span><input id="distributorSearch" type="text"></span></th>
+			<th>Country<span><input id="countrySearch" type="text"></span></th>
+			<th>Year<span><input id="yearSearch" type="text"></span></th>
+
+		</tr>
+		<tbody id="moviesDiv">
+			<!--  <tr>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Germany</td>
+    </tr>
+    <tr>
+      <td>Berglunds snabbkop</td>
+      <td>Sweden</td>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Germany</td>
+    </tr> -->
+
+		</tbody>
+	</table>
 
 
-
-		</div>
+		<!-- </div>
 
 	</div>
-
+ -->
 </body>
 
 </html>

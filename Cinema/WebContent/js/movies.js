@@ -3,7 +3,7 @@ $(document).ready(function(e){
 	var idMovie = getUrlParameter('id');
 	console.log("filmovi")
 	
-	var movieCard = $('#movieCard');
+	var moviesDiv = $('#moviesDiv');
 	var liUsers = $('#liUsers');
 	liUsers.hide();
 	var liMyProfile = $('#liMyProfile');
@@ -36,14 +36,14 @@ $(document).ready(function(e){
 	getMovies();
 	
 	function initMovies(movies){
-		movieCard.empty();
+		moviesDiv.empty();
 		for (var i = 0; i < movies.length; i++) {
 			appendMovie(movies[i]);
 		}
 	};
 	 
 	
-function appendMovie(movie){
+/*function appendMovie(movie){
 		var col1 = $('<div class="col-sm-3">');
 	//	var col2 = $(' <div class="card h-100">');
 		var img = $('<img class="card-img-top" src="img/singlMovie.jpg" alt="">');
@@ -60,13 +60,47 @@ function appendMovie(movie){
 		movieCard.append(col1);
 		data.append(footer);
 		footer.append(fOM);
-	}
+	}*/
+
+function appendMovie(movie){
+	var tableRow = $('<tr>');
+	var title = $('<td>'+movie.title+'</td>');
+	var genre = $('<td>'+movie.genre+'</td>');
+	var duration = $('<td>'+movie.duration+'</td>');
+	var distributor = $('<td>'+movie.distributor+'</td>');
+	var country = $('<td>'+movie.country+'</td>');
+	var year = $('<td>'+movie.year+'</td></tr>');
+	
+	tableRow.append(title);
+	tableRow.append(genre);
+	tableRow.append(duration);
+	tableRow.append(distributor);
+	tableRow.append(country);
+	tableRow.append(year);
+	moviesDiv.append(tableRow);
+	
+}
 	
 	function getMovies(){
+		var titleSearch = $("#titleSearch").val();
+		var genreSearch = $("#genreSearch").val();
+		var durationSearch = $("#durationSearch").val();
+		var distributorSearch = $("#distributorSearch").val();
+		var countrySearch = $("#countrySearch").val();
+		var yearSearch = $("#yearSearch").val();
 		
-		
+		var params = $.param({
+			titleSearch : titleSearch,
+			genreSearch : genreSearch,
+			durationSearch : durationSearch,
+			distributorSearch : distributorSearch,
+			countrySearch : countrySearch,
+			yearSearch : yearSearch,
+			
+		});
+		console.log(params)
 		$.ajax({
-			url: 'Movies2Servlet',
+			url: 'Movies2Servlet?' + params,
 			method: 'GET',
 			dataType: 'json',
 			success: function(response){
@@ -84,6 +118,25 @@ function appendMovie(movie){
 			}
 		});
 	};
+	
+	$("#titleSearch").change(function(e){
+		getMovies();
+	});	
+	$("#genreSearch").change(function(e){
+		getMovies();
+	});	
+	$("#durationSearch").change(function(e){
+		getMovies();
+	});		
+	$("#distributorSearch").change(function(e){
+		getMovies();
+	});	
+	$("#countrySearch").change(function(e){
+		getMovies();
+	});	
+	$("#yearSearch").change(function(e){
+		getMovies();
+	});	
 	
 	var saveMovie = $('#saveMovie');
 	
@@ -131,7 +184,7 @@ function appendMovie(movie){
 	});
 		
 		
-
+	
 	
 	
 	
