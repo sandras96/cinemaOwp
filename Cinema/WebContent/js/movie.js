@@ -91,7 +91,7 @@ $(document).ready(function(e){
       '</div>'+
       
 					 '<div class="modal-footer">'+
-					 '<button type="button" class="btn btn-danger" style="float:left">Delete this movie</button>'+
+					 '<button type="button" class="btn btn-danger" id="deleteMovieBtn" style="float:left">Delete this movie</button>'+
 					      '<button type="submit" id="editMovie" class="btn btn-success">Save</button>'+
 					      	'</div>'+
 					      		'</div></td>');
@@ -105,9 +105,34 @@ $(document).ready(function(e){
 				div1.append(pencil);
 			}
 		}
+		var deleteMovieBtn = $("#deleteMovieBtn");
+		deleteMovieBtn.click(function(e){
+			e.preventDefault();
+			var params = $.param({
+				id : idMovie,
+				action : "delete",
+			});
+			console.log(params);
+			$.ajax({
+				url: 'MovieServlet?' + params,
+				method: 'POST',
+				dataType: 'json',
+				success : function(response){
+					if(response.status == "success"){
+						console.log("obrisanoo");
+						window.location.replace('/Cinema/movies.html')
+					}else{
+						alert(response.message);
+					}
+				},
+				error: function(request, message, error){
+					alert(error);
+				}
+			});
+		});
 		
 	
-	}
+	}	
 	
 	
 	function getMovie(){

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.UserDAO;
+import cinemaDAO.Util;
 import model.User;
 import model.User.Role;
 
@@ -40,28 +41,34 @@ public class UsersServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		List<User> users = new ArrayList<>();
-		String inputSearch = request.getParameter("inputSearch");
+		
+		String usernameSearch = Util.createParam(request.getParameter("usernameSearch"));
+		String roleSearch = Util.createParam(request.getParameter("roleSearch"));
+		
+		System.out.println("parametri su" + usernameSearch + roleSearch);
+/*		String inputSearch = request.getParameter("inputSearch");
 		String selectSearch = request.getParameter("select");
 		String direction = request.getParameter("direction");
 		String orderBy = request.getParameter("orderBy");
 		String defaultOrderBy = "datetime";
-		String defaultDirection = "desc";
+		String defaultDirection = "desc";*/
 		
 		
 		String message = "";
 		String status = "";
 		
-		System.out.println("search param je " + inputSearch + "selec serarch je " + selectSearch );
+//		System.out.println("search param je " + inputSearch + "selec serarch je " + selectSearch ); 
 		try {
 			
 			if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 				throw new Exception("Access denied!");
 			}
-			if(orderBy != null && direction != null) {
-				users = UserDAO.getAllBySearch(inputSearch, orderBy, direction,selectSearch);
+			users = UserDAO.getAll(usernameSearch, roleSearch);
+		/*	if(orderBy != null && direction != null) {
+				users = UserDAO.getAllBySearch(inputSearch, orderBy, direction,selectSearch);0-
 			}else {
 				users = UserDAO.getAllBySearch(inputSearch, defaultOrderBy, defaultDirection, selectSearch);
-			}
+			}*/
 			
 			
 			message = "uspesno";

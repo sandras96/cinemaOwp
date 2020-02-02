@@ -3,7 +3,6 @@ $(document).ready(function(e){
 	var screeningsDiv = $('#screeningsDiv');
 	getScreenings();
 	
-	
 	var liUsers = $('#liUsers');
 	liUsers.hide();
 	var liMyProfile = $('#liMyProfile');
@@ -60,10 +59,26 @@ $(document).ready(function(e){
 	
 	
 	function getScreenings(){
-		console.log("Mmmm")
+		var movieSearch = $("#movieSearch").val();
+		var datetimeSearch = $("#datetimeSearch").val();
+		var screentypeSearch = $("#screentypeSearch").val();
+		var auditoriumSearch = $("#auditoriumSearch").val();
+		var ticketPriceSearch = $("#ticketPriceSearch").val();
+		
+		var params = $.param({
+			movieSearch : movieSearch,
+			datetimeSearch : datetimeSearch,
+			screentypeSearch : screentypeSearch,
+			auditoriumSearch : auditoriumSearch,
+			ticketPriceSearch : ticketPriceSearch,
+			
+		});
+		
+		console.log(params)
 		$.ajax({
 			url:'ScreeningsServlet',
 			method: 'GET',
+			data : params,
 			dataType: 'json',
 			success: function(response){
 				if(response.status == "success"){
@@ -84,32 +99,37 @@ $(document).ready(function(e){
 		
 	}
 	
+
+	$("#movieSearch").change(function(e){
+		getScreenings();
+	});	
+	$("#screentypeSearch").change(function(e){
+		getScreenings();
+	});	
+	$("#auditoriumSearch").change(function(e){
+		getScreenings();
+	});	
+	/*$("#ticketPriceSearch").change(function(e){
+		getMovies();
+	});*/	
 	
 	
-	$("#selMovies").hide();
-	$("#selectMovieBtn").click(function (e){
-		console.log("select movie plssss")
-		$("#selMovies").show();
-		$.ajax({
-			url:'ScreeningsServlet',
-			method: 'GET',
-			dataType: 'json',
-			success: function(response){
-				if(response.status == "success"){
-					console.log("dobila sam filmoveee" + response.movies)
-					initMovies(response.movies);
-				
-				}else{
-					alert(response.message);
-				}
-			},
-			error: function(request, message, error){
-				alert(error);
+	$.ajax({
+		url:'ScreeningsServlet',
+		method: 'GET',
+		dataType: 'json',
+		success: function(response){
+			if(response.status == "success"){
+				console.log("dobila sam a" + response.movies)
+				initMovies(response.movies);
+			
+			}else{
+				alert(response.message);
 			}
-		});
-		
-		
-		
+		},
+		error: function(request, message, error){
+			alert(error);
+		}
 	});
 	function initMovies(movies){
 		 var $select = $("#selMovies");

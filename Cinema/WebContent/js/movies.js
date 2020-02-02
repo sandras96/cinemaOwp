@@ -28,6 +28,7 @@ $(document).ready(function(e){
 			
 			if(loggedInUser.role == "ADMIN"){
 				liUsers.show();
+				createMovie.show();
 			}
 			
 		}
@@ -62,6 +63,8 @@ function appendMovie(movie){
 	}
 	
 	function getMovies(){
+		
+		
 		$.ajax({
 			url: 'Movies2Servlet',
 			method: 'GET',
@@ -129,7 +132,6 @@ function appendMovie(movie){
 		
 		
 
-	
 	
 	
 	

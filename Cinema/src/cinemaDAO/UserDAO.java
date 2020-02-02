@@ -12,24 +12,28 @@ import model.User.Role;
 
 public class UserDAO {
 
-	public static List<User> getAll() throws Exception {
+	public static List<User> getAll(String usernameParam, String roleParam) throws Exception {
 		List<User> users = new ArrayList<>();
 		Connection conn = ConnectionManager.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			String query = "select * from user;";
+			String query = "select * from user where deleted = 0 and username like ? and role like ?";
 			ps = conn.prepareStatement(query);
+			ps.setString(1, usernameParam);
+			ps.setString(2, roleParam);
 			rs = ps.executeQuery();
+			System.out.println("kveti je " + query);
 			while (rs.next()) {
 				int index = 1;
 				String username = rs.getString(index++);
 				String password = rs.getString(index++);
 				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				Role role = Role.valueOf(rs.getString(index++));
+				boolean deleted = rs.getBoolean(index++);
 
-				User user = new User(username, password, datetime, role);
+				User user = new User(username, password, datetime, role, deleted);
 				users.add(user);
 
 			}
@@ -61,7 +65,7 @@ public class UserDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "select * from user where username= ?";
+			String query = "select * from user where deleted = 0 and username= ?";
 			System.out.println("kveri je " + query);
 			ps = conn.prepareStatement(query);
 			ps.setString(1, username);
@@ -75,8 +79,9 @@ public class UserDAO {
 				String password = rs.getString(index++);
 				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				Role role = Role.valueOf(rs.getString(index++));
+				boolean deleted = rs.getBoolean(index++);
 
-				return new User(username1, password, datetime, role);
+				return new User(username1, password, datetime, role, deleted);
 
 			}
 		} finally {
@@ -106,13 +111,14 @@ public class UserDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "insert into user (username, password, datetime, role) values (?,?,?,?)";
+			String query = "insert into user (username, password, datetime, role, deleted) values (?,?,?,?,?)";
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			ps.setString(index++, user.getUsername());
 			ps.setString(index++, user.getPassword());
 			ps.setString(index++, FormatDate.formatDate(user.getDatetime()));
 			ps.setString(index++, user.getRole().toString());
+			ps.setBoolean(index++, user.isDeleted());
 
 			return ps.executeUpdate() == 1;
 
@@ -136,15 +142,18 @@ public class UserDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "update user set password = ?, datetime = ?, role = ? where username=?";
+			String query = "update user set password = ?, datetime = ?, role = ?, deleted = ? where username=?";
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			ps.setString(index++, user.getPassword());
 			ps.setString(index++, FormatDate.formatDate(user.getDatetime()));
 			ps.setString(index++, user.getRole().toString());
+			ps.setBoolean(index++, user.isDeleted());
 			ps.setString(index++, user.getUsername());
+			
 
-			return ps.executeUpdate() == 1;
+			boolean retval = ps.executeUpdate() == 1;
+			return retval;
 
 		} finally {
 			try {
@@ -194,8 +203,9 @@ public class UserDAO {
 				String password = rs.getString(index++);
 				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				Role role = Role.valueOf(rs.getString(index++));
+				boolean deleted = rs.getBoolean(index++);
 
-				User user = new User(username, password, datetime, role);
+				User user = new User(username, password, datetime, role,deleted);
 				users.add(user);
 
 			}
@@ -220,5 +230,24 @@ public class UserDAO {
 		
 		return users;
 	}
+	
+	public static boolean delete(String username) throws Exception {
+		Connection conn = ConnectionManager.getConnection();
 
+		PreparedStatement pstmt = null;
+		try {
+			String query = "delete from user where username = ?";
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, username);
+			System.out.println(pstmt);
+
+			return pstmt.executeUpdate() == 1;
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();} 
+		}
+	}
+
+	
 }

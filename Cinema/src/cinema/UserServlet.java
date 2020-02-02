@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,6 +52,9 @@ public class UserServlet extends HttpServlet {
 			} else {
 				if (loggedInUser.getRole() == Role.ADMIN) {
 					user = UserDAO.getByUsername(username);
+					if (user == null) {
+						throw new Exception("User does not exist");
+					}
 				} else {
 					if (loggedInUser.getUsername().equals(username)) {
 						user = UserDAO.getByUsername(loggedInUser.getUsername());
@@ -60,7 +64,8 @@ public class UserServlet extends HttpServlet {
 
 				}
 			}
-			System.out.println("LoggedInUser je:" + loggedInUser.getUsername() +"pass"+ loggedInUser.getUsername()+"role" + loggedInUser.getRole());
+			System.out.println("LoggedInUser je:" + loggedInUser.getUsername() + "pass" + loggedInUser.getUsername()
+					+ "role" + loggedInUser.getRole());
 			message = "uspesno";
 			status = "success";
 		} catch (Exception e) {
@@ -102,40 +107,76 @@ public class UserServlet extends HttpServlet {
 		try {
 			switch (action) {
 			case "update":
-				if (loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
+				user = UserDAO.getByUsername(username);
+				if (user == null) {
+					throw new Exception("User does not exist");
+				}
+				if (loggedInUser == null) {
 					throw new Exception("Access denied");
 				} else {
-					user = UserDAO.getByUsername(username);
-					if (user == null) {
-						throw new Exception("User does not exist");
-					}
-					if (!newPass.equals("")) {
-						user.setPassword(newPass);
-						System.out.println("nova lozinka je " + newPass);
-					}
+					if (loggedInUser.getRole() == Role.ADMIN) {
+						if (!newPass.equals("")) {
+							user.setPassword(newPass);
+						} else {
+							user.setPassword(user.getPassword());
+						}
+						if (select.equals("")) {
+							user.setRole(user.getRole());
+						} else if (select.equals("USER")) {
+							user.setRole(User.Role.USER);
+						} else {
+							user.setRole(User.Role.ADMIN);
+						}
 
-					if (select.equals("")) {
-						user.setRole(user.getRole());
-					} else if (select.equals("USER")) {
-						user.setRole(User.Role.USER);
 					} else {
-						user.setRole(User.Role.ADMIN);
+						if (loggedInUser.getUsername().equals(username)) {
+							if (!newPass.equals("")) {
+								user.setPassword(newPass);
+								user.setRole(user.getRole());
+								System.out.println("nova lozinka je " + newPass);
+							} else {
+								user.setPassword(user.getPassword());
+							}
+						}
+
 					}
 				}
-				
-				if(!UserDAO.updateUser(user)) {
+			
+				if (!UserDAO.updateUser(user)) {
 					throw new Exception("No changes");
 				}
-				System.out.println("Izmenio sam useraa " + user.getPassword());
+				
 				message = "uspesno";
 				status = "success";
+				break;
+
+			case "delete":
+				User user1 = UserDAO.getByUsername(username);
+				if(user1 == null) {
+					throw new Exception("User does not exist");
+				}
+				if (loggedInUser == null || loggedInUser.getRole() != User.Role.ADMIN) {
+					throw new Exception("Access denied!");
+				} else 
+					if(loggedInUser.getUsername().equals(user1.getUsername())) {
+						throw new Exception("Access denied!");
+					}else {
+						
+					if (!UserDAO.delete(username)) {
+						user1.setDeleted(true);
+						UserDAO.updateUser(user1);
+					}
+					}
+				status = "success";
+				message = "Uspesno";
+
 				break;
 			}
 
 		} catch (Exception e) {
 			message = e.getMessage();
 			status = "failure";
-			
+
 		}
 
 		Map<String, Object> data = new HashMap<String, Object>();

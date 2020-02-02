@@ -30,11 +30,18 @@ $(document).ready(function(e){
 		
 	}
 	
-	
 	function getUsers(){
+		var usernameSearch = $("#usernameSearch").val();
+		var roleSearch = $('#roleSearch').find(":selected").val();
+		var params = $.param({
+			usernameSearch :  usernameSearch,
+			roleSearch : roleSearch,
+		});
+		console.log("paramssss" + params); 
 		$.ajax({
 			url: 'UsersServlet',
 			method: 'GET',
+			data : params,
 			dataType: 'json',
 			success: function(response){
 				if(response.status == "success"){
@@ -54,9 +61,14 @@ $(document).ready(function(e){
 		});
 	};
 	
+	$("#usernameSearch").change(function(e){
+		getUsers();
+	});
+	$("#roleSearch").change(function(e){
+		getUsers();
+	})
 
-	var submitSearch = $('#submitSearch');
-	
+	/*var submitSearch = $('#submitSearch');
 	
 	submitSearch.click(function(e){
 		e.preventDefault();
@@ -86,7 +98,7 @@ $(document).ready(function(e){
 			}
 			
 		});
-	});
+	});*/
 	
 	
 	$('#usernameAsc_btn').click(function(e){

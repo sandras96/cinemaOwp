@@ -19,6 +19,7 @@ import cinemaDAO.AuditoriumDAO;
 import cinemaDAO.MovieDAO;
 import cinemaDAO.ScreenTypeDAO;
 import cinemaDAO.ScreeningDAO;
+import cinemaDAO.Util;
 import model.Auditorium;
 import model.Movie;
 import model.ScreenType;
@@ -50,10 +51,18 @@ public class ScreeningsServlet extends HttpServlet {
 		List<Screening> screenings = new ArrayList<>();
 		List<Movie> movies = new ArrayList<>();
 		List<Auditorium> auditoriums = new ArrayList<>();
-		String idScreenType = request.getParameter("idScreenType");
+ 		String idScreenType = request.getParameter("idScreenType");
 		
 		System.out.println("id sckrin tajpa jeee" + idScreenType);
 		List<ScreenType> screentypes = new ArrayList<>();
+		
+		String movieSearch = Util.createParam(request.getParameter("movieSearch"));
+	//	String datetimeSearch = Util.createParam(request.getParameter("datetimeSearch"));
+		String screentypeSearch = Util.createParam(request.getParameter("screentypeSearch"));
+		String auditoriumSearch = Util.createParam(request.getParameter("auditoriumSearch"));
+		
+	//	String ticketPriceSearch = Util.createParam(request.getParameter("ticketPriceSearch"));
+		
 		String message = "";
 		String status = "";
 		
@@ -61,7 +70,7 @@ public class ScreeningsServlet extends HttpServlet {
 			
 			movies = MovieDAO.getAll();
 			screentypes = ScreenTypeDAO.getAll();
-			screenings = ScreeningDAO.getAll();
+			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch);
 			if(idScreenType != null) {
 				System.out.println("idScreenType" + idScreenType);
 				auditoriums = AuditoriumDAO.getAllAuditoriumsforType(Integer.parseInt(idScreenType));

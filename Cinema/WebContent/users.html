@@ -87,7 +87,7 @@
 					<p>
 						<b>USERS</b>
 					</p>
-					<p>
+<!-- 					<p>
 					<input type="text" id="inputSearch"
 				placeholder="">
 				
@@ -97,19 +97,29 @@
 		      			<option value="username">username</option>
 		      			<option value="role">role</option>
 		      			
-		      	</select></p>
+		      	</select></p> -->
 		      	 
 					<div class="table-responsive">
 						<table class="table user-list">
 							<thead>
 								<tr>
 
-									<th><span>username</span></th>
+									<th>
+										<span>username</span>
+										<input id="usernameSearch" type="text">
+									</th>
 									<th><span>password</span></th>
 									<th><span>datetime</span></th>
-									<th><span>role</span></th>
+									<th>
+										<span>role</span>
+										<select id="roleSearch">
+											<option value=""> All </option>
+											<option value="ADMIN"> Admin </option>
+											<option value="USER"> User </option>
+										</select>
+									</th>
 									<th>&nbsp;</th>
-									<th><div class="btn-group">
+								<!-- 	<th><div class="btn-group">
 							  <button type="button" class="btn btn-default">Sort</button>
 							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							  <span class="caret"></span> </button>
@@ -119,7 +129,7 @@
 								     <li><a id="roleAsc_btn" role="button">role<span class="glyphicon glyphicon-arrow-up"></span></a></li>
 								      <li><a id="roleDesc_btn" role="button">role<span class="glyphicon glyphicon-arrow-down"></span></a></li>
 								  </ul>
-						</div></th>
+						</div></th> -->
 									  <th>&nbsp;</th>
  
 								</tr>

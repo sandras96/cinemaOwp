@@ -15,7 +15,8 @@ import model.User;
 
 public class ScreeningDAO {
 
-	public static List<Screening> getAll() throws Exception {
+	public static List<Screening> getAll(String movieParam, String scrtypeParam,
+			String auditParam) throws Exception {
 
 		Connection conn = ConnectionManager.getConnection();
 		List<Screening> screenings = new ArrayList<>();
@@ -23,8 +24,20 @@ public class ScreeningDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "select * from screening;";
+			String query = "select scr.* from screening scr" + 
+					"    left join movie m on scr.movieId = m.id" + 
+					"    left join screenType sct on scr.screenTypeId = sct.id" + 
+					"    left join auditorium a on scr.auditoriumId = a.id" + 
+					" where" + 
+					"    a.name like ? and" + 
+					"    sct.name like ? and" + 
+					"    m.title like ? and "+
+					"	 scr.deleted = 0;";
+			
 			ps = conn.prepareStatement(query);
+			ps.setString(1, auditParam);
+			ps.setString(2, scrtypeParam);
+			ps.setString(3, movieParam);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				int index = 1;
@@ -35,7 +48,8 @@ public class ScreeningDAO {
 				Date datetime = FormatDate.parseDate(rs.getString(index++));
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
-				Screening screening = new Screening(screeningId, movie, screenType, auditorium, datetime, ticketPrice,user);
+				boolean deleted = rs.getBoolean(index++);
+				Screening screening = new Screening(screeningId, movie, screenType, auditorium, datetime, ticketPrice,user, deleted);
 				screenings.add(screening);
 				
 			}
@@ -67,7 +81,7 @@ public class ScreeningDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "select * from screening where id =?";
+			String query = "select * from screening where deleted = 0 and id =?";
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -80,8 +94,9 @@ public class ScreeningDAO {
 				Date datetime = rs.getDate(index++);
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
+				boolean deleted = rs.getBoolean(index++);
 				Screening screening = new Screening(screeningId, movie, screenType, auditorium, datetime, ticketPrice,
-						user);
+						user, deleted);
 				return screening;
 			}
 
@@ -109,7 +124,7 @@ public class ScreeningDAO {
 
 		try {
 
-			String query = "insert into screening (movieId, screentypeId, auditoriumId, datetime, ticketPrice, user) values (?,?,?,?,?,?)";
+			String query = "insert into screening (movieId, screentypeId, auditoriumId, datetime, ticketPrice, user, deleted) values (?,?,?,?,?,?,?)";
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			ps.setInt(index++, screening.getMovie().getId());
@@ -118,6 +133,7 @@ public class ScreeningDAO {
 			ps.setString(index++, FormatDate.formatDate(screening.getDatetime()));
 			ps.setDouble(index++, screening.getTicketPrice());
 			ps.setString(index++, screening.getUser().getUsername());
+			ps.setBoolean(index++, screening.isDeleted());
 			
 
 			return ps.executeUpdate() == 1;

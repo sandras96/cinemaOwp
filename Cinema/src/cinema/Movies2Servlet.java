@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.MovieDAO;
+import cinemaDAO.Util;
 import model.Movie;
 import model.User;
 import model.User.Role;
@@ -41,6 +42,9 @@ public class Movies2Servlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		List<Movie> movies = new ArrayList<>();
+		
+		
+		
 		String message = "";
 		String status = "";
 		
@@ -96,7 +100,9 @@ public class Movies2Servlet extends HttpServlet {
 					"".equals(duration) || "".equals(distributor) || "".equals(country) || "".equals(year) || "".equals(description) ) {
 					throw new Exception("Please fill all the fields");
 				}
-				
+				if (!Util.isNumeric(year)) {
+					throw new Exception("Godina nije numberic");
+				}
 				if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 					throw new Exception("Access denied!");
 				}else {
@@ -123,7 +129,7 @@ public class Movies2Servlet extends HttpServlet {
 			default:
 				break;
 			}
-		}catch(Exception e){
+		} catch(Exception e){
 			message = e.getMessage();
 			status = "failure";
 		}

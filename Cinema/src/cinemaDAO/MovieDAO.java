@@ -18,7 +18,7 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "select * from movie";
+			String query = "select * from movie where deleted = 0";
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -34,9 +34,10 @@ public class MovieDAO {
 				String country = rs.getString(index++);
 				Integer year = rs.getInt(index++);
 				String description = rs.getString(index++);
+				boolean deleted = rs.getBoolean(index++);
 
 				Movie movie = new Movie(movieId, title, directors, actors, genre, duration, distributor, country, year,
-						description);
+						description, deleted);
 				movies.add(movie);
 
 			}
@@ -68,7 +69,7 @@ public class MovieDAO {
 		ResultSet rs = null;
 		try {
 
-			String query = "select * from movie where id = ?";
+			String query = "select * from movie where deleted = 0 and id = ?";
 
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
@@ -88,9 +89,10 @@ public class MovieDAO {
 				String country = rs.getString(index++);
 				Integer year = rs.getInt(index++);
 				String description = rs.getString(index++);
+				boolean deleted = rs.getBoolean(index++);
 
 				return new Movie(movieId, title, directors, actors, genre, duration, distributor, country, year,
-						description);
+						description, deleted);
 			}
 		}
 
@@ -122,8 +124,8 @@ public class MovieDAO {
 
 		try {
 
-			String query = "insert into movie (title, directors, actors, genre, duration, distributor, country, year, description)"
-					+ " VALUES (?,?,?,?,?,?,?,?,?);";
+			String query = "insert into movie (title, directors, actors, genre, duration, distributor, country, year, description, deleted)"
+					+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			
@@ -136,6 +138,7 @@ public class MovieDAO {
 			ps.setString(index++, movie.getCountry());
 			ps.setInt(index++, movie.getYear());
 			ps.setString(index++, movie.getDescription());
+			ps.setBoolean(index++, movie.isDeleted());
 
 			return ps.executeUpdate() == 1;
 			
@@ -160,7 +163,7 @@ public class MovieDAO {
 
 		try {
 			String query = "update movie set title = ?, directors = ?, actors = ?, genre = ?, duration = ?,"
-					+ "distributor = ?, country = ?, year = ?, description =? where id=?";
+					+ "distributor = ?, country = ?, year = ?, description =?, deleted = ? where id=?";
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			ps.setString(index++, movie.getTitle());
@@ -172,7 +175,9 @@ public class MovieDAO {
 			ps.setString(index++, movie.getCountry());
 			ps.setInt(index++,movie.getYear());
 			ps.setString(index++, movie.getDescription());
+			ps.setBoolean(index++, movie.isDeleted());
 			ps.setInt(index++, movie.getId());
+			
 			
 			System.out.println(ps);
 			return ps.executeUpdate() == 1;
@@ -190,5 +195,24 @@ public class MovieDAO {
 			}
 		}
 
+	}
+	
+	
+	public static boolean deleteMovie(Integer id) throws Exception {
+		Connection conn = ConnectionManager.getConnection();
+
+		PreparedStatement pstmt = null;
+		try {
+			String query = "delete from movie where id = ?";
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, id);
+			System.out.println(pstmt);
+
+			return pstmt.executeUpdate() == 1;
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();} 
+		}
 	}
 }

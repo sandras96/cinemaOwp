@@ -9,19 +9,21 @@ public class Ticket {
 	private Seat seat;
 	private Date datetime;
 	private User user;
-	
+	boolean deleted;
+
 	public Ticket() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Ticket(int id, Screening screening, Seat seat, Date datetime, User user) {
+	public Ticket(int id, Screening screening, Seat seat, Date datetime, User user, boolean deleted) {
 		super();
 		this.id = id;
 		this.screening = screening;
 		this.seat = seat;
 		this.datetime = datetime;
 		this.user = user;
+		this.deleted = deleted;
 	}
 
 	public int getId() {
@@ -63,7 +65,13 @@ public class Ticket {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 }

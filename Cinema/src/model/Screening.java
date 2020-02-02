@@ -11,14 +11,15 @@ public class Screening {
 	private Date datetime;
 	private double ticketPrice;
 	private User user;
-	
+	private boolean deleted;
+
 	public Screening() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Screening(int id, Movie movie, ScreenType screentype, Auditorium auditorium, Date datetime,
-			double ticketPrice, User user) {
+			double ticketPrice, User user, boolean deleted) {
 		super();
 		this.id = id;
 		this.movie = movie;
@@ -27,6 +28,7 @@ public class Screening {
 		this.datetime = datetime;
 		this.ticketPrice = ticketPrice;
 		this.user = user;
+		this.deleted = deleted;
 	}
 
 	public int getId() {
@@ -84,7 +86,13 @@ public class Screening {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.MovieDAO;
+import cinemaDAO.UserDAO;
 import model.Movie;
 import model.User;
 import model.User.Role;
@@ -118,10 +119,28 @@ public class MovieServlet extends HttpServlet {
 				status= "success";
 				
 				break;
+				
+				
+			case "delete" :
+				Movie movie1 = MovieDAO.getById(Integer.parseInt(idMovie));
+				if(loggedInUser == null || loggedInUser.getRole() != User.Role.ADMIN) {
+					throw new Exception("Access denied!");
+				}else {
+					
+				if(!MovieDAO.deleteMovie(Integer.parseInt(idMovie))) {
+					movie1.setDeleted(true);
+					MovieDAO.updateMovie(movie1);
+				}
+				}
+				
+				status = "success";
+				message = "Uspesno obradjen zahtev";
+				
+				break;
 			}
 			
 		} catch (Exception e) {
-			message = e.getMessage();
+			e.printStackTrace();
 			status = "failure";
 		}
 		

@@ -5,10 +5,14 @@ $(document).ready(function(e){
 	var username = getUrlParameter('username');
 	
 	var usrDiv = $('#usrContainer');
-	var deleteUserBtn = $('#deleteUserBtn');
+
 	var liUsers = $('#liUsers');
 	liUsers.hide();
+	var deleteUserBtn = $('#deleteUserBtn');
 	deleteUserBtn.hide();
+	
+	var updateRole = $('#updateRole');
+	updateRole.hide();
 	
 	function showHide(loggedInUser){
 		if(loggedInUser.role == "ADMIN"){
@@ -32,20 +36,51 @@ $(document).ready(function(e){
 		usrDiv.append(username);
 		usrDiv.append(registrationDate);
 		usrDiv.append(role);
+		usrDiv.append(pencil);
 	
-		if(loggedInUser.username == u.username){
-			usrDiv.append(pencil);
-			} else
+		
 		if(loggedInUser.role=="ADMIN"){
+			updateRole.show();
 			usrDiv.append(pencil);
-			deleteUserBtn.show();
+			
+			if(loggedInUser.username != u.username){
+				deleteUserBtn.show();
+			}
+			
 		}
+		
+	
+			
 	
 		
 		
 		
 	};
 	
+	deleteUserBtn.click(function(e){
+		e.preventDefault();
+		var params = $.param({
+			usr : username,
+			action : "delete"
+		});
+		console.log(params);
+		$.ajax({
+			url: 'UserServlet?' + params,
+			method: 'POST',
+			dataType: 'json',
+			success : function(response){
+				if(response.status == "success"){
+					alert(response.status)
+					window.location.replace('/Cinema/users.html')
+				}else{
+					alert(response.message);
+				}
+			},
+			error: function(request, message, error){
+				alert(error);
+			}
+		});
+	});
 	
 	function getUser(){
 		var params = $.param({

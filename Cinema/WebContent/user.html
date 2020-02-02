@@ -114,10 +114,10 @@
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
-								<label for="password"> New password:</label>
-								 <input id="newPass" type="text" class="form-control">
+								<label for="password" id="newPasslabel"> New password:</label>
+								 <input id="newPass" type="text" value="" class="form-control">
 							</div>
-							<div class="form-group">
+							<div class="form-group" id="updateRole">
 		      		<label for="sel2">Select role:</label>
 		      		<select class="form-control" id="selectRole">
 		      			<option selected hidden>Role</option>
@@ -128,7 +128,7 @@
 						
 						</div>
 						<div class="modal-footer">
-						<button type="button" class="btn btn-danger" id="deleteUserBtn"style="float:left">Delete this user</button>
+						<button class="btn btn-danger" id="deleteUserBtn"style="float:left">Delete this user</button>
 							<button type="submit" id="saveUser" class="btn btn-success">Save</button>
 						</div>
 					</div>

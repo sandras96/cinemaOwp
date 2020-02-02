@@ -51,11 +51,14 @@ public class LoginServlet extends HttpServlet {
 		try {
 			user = UserDAO.getByUsername(username);
 			if(user == null) {
-				throw new Exception("Unknown user");
+				throw new Exception("User does not exist");
 			}
 			if(!user.getPassword().equals(password)) {
 				throw new Exception("Wrong password");
 			}
+			/*if(user.isDeleted()) {
+				throw new Exception("User deleted!"); ???????
+			}*/
 			HttpSession session = request.getSession();
 			session.setAttribute("loggedInUser", user);
 			
