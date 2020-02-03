@@ -39,12 +39,10 @@ public class ScreeningServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String id = request.getParameter("id");
 		Screening screening = null;
-		List<Movie> movies = new ArrayList<>();
 		String message = "";
 		String status = "";
 		try {
 			screening = ScreeningDAO.getById(Integer.parseInt(id));
-			movies = MovieDAO.getAll();
 			
 			message="uspesno";
 			status = "success";
@@ -60,7 +58,6 @@ public class ScreeningServlet extends HttpServlet {
 		data.put("message", message);
 		data.put("status", status);
 		data.put("screening", screening);
-		data.put("movies", movies);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonData = mapper.writeValueAsString(data);

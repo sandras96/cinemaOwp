@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.MovieDAO;
 import cinemaDAO.UserDAO;
+import cinemaDAO.Util;
 import model.Movie;
 import model.User;
 import model.User.Role;
@@ -106,10 +107,19 @@ public class MovieServlet extends HttpServlet {
 					movie.setDirectors(directors);
 					movie.setActors(actors);
 					movie.setGenre(genre);
-					movie.setDuration(Integer.parseInt(duration));
+					if(!Util.isNumeric(duration)) {
+						throw new Exception("Please put number for duration");
+					}else {
+						movie.setDuration(Integer.parseInt(duration));
+					}
+					
 					movie.setDistributor(distributor);
 					movie.setCountry(country);
-					movie.setYear(Integer.parseInt(year));
+					if(!Util.isNumeric(year)) {
+						throw new Exception("Please put number for year");
+					}else {
+						movie.setYear(Integer.parseInt(year));
+					}
 					movie.setDescription(description);
 					MovieDAO.updateMovie(movie);
 					
@@ -140,7 +150,7 @@ public class MovieServlet extends HttpServlet {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			message = e.getMessage();
 			status = "failure";
 		}
 		

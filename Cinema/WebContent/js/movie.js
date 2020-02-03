@@ -59,7 +59,7 @@ $(document).ready(function(e){
 					      '<div class="modal-body">'+
 					      '<div class="form-group">'+
 					      		'<label for="title">Tittle:</label>'+
-					      	'<input id="title" type="text" class="form-control" required value="'+movie.title+'">'+
+					      	'<input id="title" type="text" class="form-control" value="'+movie.title+'">'+
 					      	'</div>'+
 					      '<div class="form-group">'+
 					      	'<label for="directors">Directors:</label>'+

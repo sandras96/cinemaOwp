@@ -64,7 +64,7 @@ $(document).ready(function(e){
 
 function appendMovie(movie){
 	var tableRow = $('<tr>');
-	var title = $('<td>'+movie.title+'</td>');
+	var title = $('<td><a href="/Cinema/singleMovie.html?id='+movie.id+'"</a>'+movie.title+'</td>');
 	var genre = $('<td>'+movie.genre+'</td>');
 	var duration = $('<td>'+movie.duration+'</td>');
 	var distributor = $('<td>'+movie.distributor+'</td>');

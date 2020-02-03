@@ -132,16 +132,12 @@ $(document).ready(function(e){
 	});
 	function initMovies(movies){
 		 var $select = $("#selMovies");
-	//	 $select.find("option").remove(); 
 		for (var i = 0; i < movies.length; i++) {
 			 $("<option>").val(movies[i].id).text(movies[i].title).appendTo($select);
 			
 		}
 	};
-/*	$("#selectScreentype").hide();
-	$("#selectScrtypeBtn").click(function (e){
-		$("#selectScreentype").show();
-		console.log("select skrin tajpsss plssss")*/
+
 		
 		$.ajax({
 			url:'ScreentypeServlet',

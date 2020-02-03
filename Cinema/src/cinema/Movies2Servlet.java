@@ -106,7 +106,10 @@ public class Movies2Servlet extends HttpServlet {
 					throw new Exception("Please fill all the fields");
 				}
 				if (!Util.isNumeric(year)) {
-					throw new Exception("Godina nije numberic");
+					throw new Exception("Please put number for year");
+				}
+				if(!Util.isNumeric(duration)) {
+					throw new Exception("Please put number for duration");
 				}
 				if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 					throw new Exception("Access denied!");

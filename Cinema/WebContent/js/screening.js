@@ -24,7 +24,6 @@ $(document).ready(function(e){
 	
 	
 	function getScreening(){
-		console.log("singl skrin")
 		var params = $.param({
 			id : idScr,
 		}) ;
