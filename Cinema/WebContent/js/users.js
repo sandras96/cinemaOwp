@@ -17,12 +17,10 @@ $(document).ready(function(e){
 	function appendUser(user){
 		var tableRow= $('<tr></tr>');
 		var name = $('<td><a href="/Cinema/user.html?username='+user.username+'"</a>'+user.username+'</div>');
-		var lastname = $('<td>'+user.password+'</td>');
 		var datetime = $('<td>'+user.datetime+'</td>');
 		var role = $('<td>'+user.role+'</td>');
 
 		tableRow.append(name);
-		tableRow.append(lastname);
 		tableRow.append(datetime);
 		tableRow.append(role);
 	
@@ -33,9 +31,12 @@ $(document).ready(function(e){
 	function getUsers(){
 		var usernameSearch = $("#usernameSearch").val();
 		var roleSearch = $('#roleSearch').find(":selected").val();
+		var sortBy = $('#sortBy').find(":selected").val();
+		
 		var params = $.param({
 			usernameSearch :  usernameSearch,
 			roleSearch : roleSearch,
+			sortBy : sortBy,
 		});
 		console.log("paramssss" + params); 
 		$.ajax({
@@ -66,7 +67,10 @@ $(document).ready(function(e){
 	});
 	$("#roleSearch").change(function(e){
 		getUsers();
-	})
+	});
+	$("#sortBy").change(function(e){
+		getUsers();
+	});
 
 	/*var submitSearch = $('#submitSearch');
 	
@@ -101,11 +105,14 @@ $(document).ready(function(e){
 	});*/
 	
 	
-	$('#usernameAsc_btn').click(function(e){
+/*	$('#usernameAsc_btn').click(function(e){
 		e.preventDefault();
 		var input = $('#inputSearch').val();
-		
+		var usernameSearch = $("#usernameSearch").val();
+		var roleSearch = $('#roleSearch').find(":selected").val();
 		var params = $.param({
+			usernameSearch :  usernameSearch,
+			roleSearch : roleSearch,
 			direction: "ASC",
 			orderBy: "username",
 			inputSearch : input,
@@ -116,16 +123,16 @@ $(document).ready(function(e){
 			method: 'GET',
 			dataType: 'json',
 			success: function(response){
-				initUsers(response.users);
+			//	getUsers();
 			},
 			error: function(request, message, error){
 				alert(error)
 			}
 			
 		});
-	});
+	});*/
 	
-	$('#usernameDesc_btn').click(function(e){
+	/*$('#usernameDesc_btn').click(function(e){
 		e.preventDefault();
 		var input = $('#inputSearch').val();
 		var params = $.param({
@@ -192,7 +199,7 @@ $(document).ready(function(e){
 			}
 			
 		});
-	});
+	});*/
 	
 	
 });

@@ -44,15 +44,16 @@ public class UsersServlet extends HttpServlet {
 		
 		String usernameSearch = Util.createParam(request.getParameter("usernameSearch"));
 		String roleSearch = Util.createParam(request.getParameter("roleSearch"));
+		String sortBy = request.getParameter("sortBy");
 		
-		System.out.println("parametri su" + usernameSearch + roleSearch);
+		System.out.println("parametri su" + usernameSearch + roleSearch + "sort je " + sortBy);
 /*		String inputSearch = request.getParameter("inputSearch");
-		String selectSearch = request.getParameter("select");
-		String direction = request.getParameter("direction");
+		String selectSearch = request.getParameter("select");*/
+		/*String direction = request.getParameter("direction");
 		String orderBy = request.getParameter("orderBy");
-		String defaultOrderBy = "datetime";
-		String defaultDirection = "desc";*/
-		
+		String defaultOrderBy = "username";
+		String defaultDirection = "desc";
+		*/
 		
 		String message = "";
 		String status = "";
@@ -63,8 +64,11 @@ public class UsersServlet extends HttpServlet {
 			if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 				throw new Exception("Access denied!");
 			}
-			users = UserDAO.getAll(usernameSearch, roleSearch);
-		/*	if(orderBy != null && direction != null) {
+			users = UserDAO.getAll(usernameSearch, roleSearch, sortBy);
+			
+			//	users = UserDAO.getAll(usernameSearch, roleSearch, defaultOrderBy, defaultDirection);
+			
+		/*	
 				users = UserDAO.getAllBySearch(inputSearch, orderBy, direction,selectSearch);0-
 			}else {
 				users = UserDAO.getAllBySearch(inputSearch, defaultOrderBy, defaultDirection, selectSearch);

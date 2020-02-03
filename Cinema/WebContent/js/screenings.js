@@ -61,9 +61,10 @@ $(document).ready(function(e){
 	function getScreenings(){
 		var movieSearch = $("#movieSearch").val();
 		var datetimeSearch = $("#datetimeSearch").val();
-		var screentypeSearch = $("#screentypeSearch").val();
-		var auditoriumSearch = $("#auditoriumSearch").val();
+		var screentypeSearch = $("#screentypeSearch").find(":selected").val();
+		var auditoriumSearch = $("#auditoriumSearch").find(":selected").val();
 		var ticketPriceSearch = $("#ticketPriceSearch").val();
+		var sortBy = $('#sortByScr').find(":selected").val();
 		
 		var params = $.param({
 			movieSearch : movieSearch,
@@ -71,6 +72,7 @@ $(document).ready(function(e){
 			screentypeSearch : screentypeSearch,
 			auditoriumSearch : auditoriumSearch,
 			ticketPriceSearch : ticketPriceSearch,
+			sortBy : sortBy,
 			
 		});
 		
@@ -84,6 +86,7 @@ $(document).ready(function(e){
 				if(response.status == "success"){
 					console.log("projekcije su: " + response.screenings);
 					initScreenings(response.screenings)
+					initMovies(response.movies);
 					console.log("loggedInUser je"+ response.loggedInUser);
 					showHide(response.loggedInUser);
 				}else{
@@ -111,25 +114,28 @@ $(document).ready(function(e){
 	/*$("#ticketPriceSearch").change(function(e){
 		getMovies();
 	});*/	
-	
-	
-	$.ajax({
-		url:'ScreeningsServlet',
-		method: 'GET',
-		dataType: 'json',
-		success: function(response){
-			if(response.status == "success"){
-				console.log("dobila sam a" + response.movies)
-				initMovies(response.movies);
-			
-			}else{
-				alert(response.message);
-			}
-		},
-		error: function(request, message, error){
-			alert(error);
-		}
+	$("#sortByScr").change(function(e){
+		getScreenings();
 	});
+	
+	
+//	$.ajax({
+//		url:'ScreeningsServlet',
+//		method: 'GET',
+//		dataType: 'json',
+//		success: function(response){
+//			if(response.status == "success"){
+//				console.log("dobila sam a" + response.movies)
+//				initMovies(response.movies);
+//			
+//			}else{
+//				alert(response.message);
+//			}
+//		},
+//		error: function(request, message, error){
+//			alert(error);
+//		}
+//	});
 	function initMovies(movies){
 		 var $select = $("#selMovies");
 		for (var i = 0; i < movies.length; i++) {

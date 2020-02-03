@@ -88,6 +88,7 @@ function appendMovie(movie){
 		var distributorSearch = $("#distributorSearch").val();
 		var countrySearch = $("#countrySearch").val();
 		var yearSearch = $("#yearSearch").val();
+		var sortBy = $('#sortBy').find(":selected").val();
 		
 		var params = $.param({
 			titleSearch : titleSearch,
@@ -96,6 +97,7 @@ function appendMovie(movie){
 			distributorSearch : distributorSearch,
 			countrySearch : countrySearch,
 			yearSearch : yearSearch,
+			sortBy : sortBy,
 			
 		});
 		console.log(params)
@@ -137,6 +139,9 @@ function appendMovie(movie){
 	$("#yearSearch").change(function(e){
 		getMovies();
 	});	
+	$("#sortBy").change(function(e){
+		getMovies();
+	});
 	
 	var saveMovie = $('#saveMovie');
 	

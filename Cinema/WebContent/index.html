@@ -137,7 +137,19 @@
 
 	<h3 id="scrl">
 		Scroll in the box below to view all screenings &nbsp;&nbsp;
-		<button id="button1" type="button" class="glyphicon glyphicon-sort"></button>
+								<select id="sortByScr">
+									  <option value="">Sort by</option>
+									  <option value="m.title asc">movie title asc</option>
+									  <option value="m.title desc">movie title desc</option>
+									 <!--  <option value="datetime asc">datetime asc</option>
+									  <option value="datetime desc">datetime desc</option> -->
+									  <option value="sct.name asc">screentype asc</option>
+									  <option value="sct.name desc">screentype desc</option>
+									  <option value="a.name asc">auditorium asc</option>
+									  <option value="a.name desc">auditorium desc</option>
+									  <option value="ticketPrice asc">ticketPrice asc</option>
+									  <option value="ticketPrice desc">ticketPrice desc</option>
+								</select> 
 		&nbsp;
 		<button id="button2" data-toggle="modal" type="button" data-target="#addScreening" class="glyphicon glyphicon-plus"></button>
 		
@@ -192,8 +204,20 @@
 		<tr class="header">
 			<th style="width: 40%;">Movies<span><input id="movieSearch" type="text"></span></th>
 			<th style="width: 40%;">Date and time<span><input id="datetimeSearch" type="text"></span></th>
-			<th style="width: 40%;">Screening type<span><input id="screentypeSearch" type="text"></span></th>
-			<th style="width: 40%;">Auditorium<span><input id="auditoriumSearch" type="text"></span></th>
+			<th style="width: 40%;">ScreeningType<span> <select id="screentypeSearch">
+											<option value=""> All </option>
+											<option value="2D"> 2D </option>
+											<option value="3D"> 3D </option>
+											<option value="4D"> 4D </option>
+										</select>
+									  </span></th>
+			<th style="width: 40%;">Auditorium<span><select id="auditoriumSearch">
+											<option value=""> All </option>
+											<option value="sala1"> sala1 </option>
+											<option value="sala2"> sala2 </option>
+											<option value="sala3"> sala3 </option>
+											<option value="sala4"> sala4 </option>
+										</select></span></th>
 			<th style="width: 40%;">Ticket price<span><input id="ticketPriceSearch" type="text"></span></th>
 
 		</tr>

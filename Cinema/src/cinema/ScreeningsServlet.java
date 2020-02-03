@@ -58,14 +58,16 @@ public class ScreeningsServlet extends HttpServlet {
 		String auditoriumSearch = Util.createParam(request.getParameter("auditoriumSearch"));
 		
 	//	String ticketPriceSearch = Util.createParam(request.getParameter("ticketPriceSearch"));
+		String sortBy = request.getParameter("sortBy");
 		
+		System.out.println("sortby je " + sortBy);
 		String message = "";
 		String status = "";
 		
 		try {
 			
 			movies = MovieDAO.getAll();
-			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch);
+			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, sortBy);
 		
 			
 			

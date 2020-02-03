@@ -16,7 +16,7 @@ import model.User;
 public class ScreeningDAO {
 
 	public static List<Screening> getAll(String movieParam, String scrtypeParam,
-			String auditParam) throws Exception {
+			String auditParam, String sortBy) throws Exception {
 
 		Connection conn = ConnectionManager.getConnection();
 		List<Screening> screenings = new ArrayList<>();
@@ -24,6 +24,13 @@ public class ScreeningDAO {
 		ResultSet rs = null;
 
 		try {
+			String orderBy;
+			if(sortBy.equals("")) {
+				orderBy = "m.title asc";
+			}else {
+				orderBy = sortBy;
+			}
+			
 			String query = "select scr.* from screening scr" + 
 					"    left join movie m on scr.movieId = m.id" + 
 					"    left join screenType sct on scr.screenTypeId = sct.id" + 
@@ -32,13 +39,15 @@ public class ScreeningDAO {
 					"    a.name like ? and" + 
 					"    sct.name like ? and" + 
 					"    m.title like ? and "+
-					"	 scr.deleted = 0;";
+					"	 scr.deleted = 0 "+
+					"    order by " + orderBy + ";";
 			
 			ps = conn.prepareStatement(query);
 			ps.setString(1, auditParam);
 			ps.setString(2, scrtypeParam);
 			ps.setString(3, movieParam);
 			rs = ps.executeQuery();
+			System.out.println("kveri je " + query + "order by je "+ orderBy);
 			while (rs.next()) {
 				int index = 1;
 				Integer screeningId = rs.getInt(index++);

@@ -63,7 +63,8 @@ public class MovieDAO {
 		return movies;
 
 	}
-	public static List<Movie> getAllParam(String titleParam, String genreParam, String distributorParam, String countryParam) throws Exception {
+	public static List<Movie> getAllParam(String titleParam, String genreParam, String distributorParam,
+											String countryParam, String sortBy) throws Exception {
 		
 		Connection conn = ConnectionManager.getConnection();
 		List<Movie> movies = new ArrayList<Movie>();
@@ -71,11 +72,18 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			String orderBy;
+			if(sortBy.equals("")) {
+				orderBy = "title asc";
+			}else {
+				orderBy = sortBy;
+			}
 			String query = "select * from movie where title like ?"+
 												" and genre like ? "+
 												 "and distributor like ?"+
 												 " and country like ?"+
-												 " and deleted = 0;"  ;
+												 " and deleted = 0 " +
+												 "order by " + orderBy + ";"  ;
 			
 			ps = conn.prepareStatement(query);
 			ps.setString(1, titleParam);
@@ -84,6 +92,7 @@ public class MovieDAO {
 			ps.setString(4, countryParam);
 			rs = ps.executeQuery();
 
+			System.out.println("kveri je " + query + "order by je "+ orderBy);
 			while (rs.next()) {
 				int index = 1;
 				Integer movieId = rs.getInt(index++);

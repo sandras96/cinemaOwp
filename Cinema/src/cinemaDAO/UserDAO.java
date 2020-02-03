@@ -12,19 +12,27 @@ import model.User.Role;
 
 public class UserDAO {
 
-	public static List<User> getAll(String usernameParam, String roleParam) throws Exception {
+	public static List<User> getAll(String usernameParam, String roleParam, String sortBy) throws Exception {
 		List<User> users = new ArrayList<>();
 		Connection conn = ConnectionManager.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			String query = "select * from user where deleted = 0 and username like ? and role like ?";
+			String orderBy;
+			if(sortBy.equals("")) {
+				orderBy = "username desc";
+			}else{
+				orderBy = sortBy;
+				
+			}
+			System.out.println("order je " + orderBy);
+			String query = "select * from user where deleted = 0 and username like ? and role like ? order by " + orderBy +";";
 			ps = conn.prepareStatement(query);
 			ps.setString(1, usernameParam);
 			ps.setString(2, roleParam);
 			rs = ps.executeQuery();
-			System.out.println("kveti je " + query);
+			System.out.println("KVERI SORT je " + query + "orderby je " + orderBy);
 			while (rs.next()) {
 				int index = 1;
 				String username = rs.getString(index++);

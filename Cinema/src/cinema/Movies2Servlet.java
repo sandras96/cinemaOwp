@@ -49,12 +49,14 @@ public class Movies2Servlet extends HttpServlet {
 		String distributorSearch = Util.createParam(request.getParameter("distributorSearch"));
 		String countrySearch = Util.createParam(request.getParameter("countrySearch"));
 	//	String yearSearch = Util.createParam(request.getParameter("yearSearch"));
+		String sortBy = request.getParameter("sortBy");
 		
 		String message = "";
 		String status = "";
 		
 		try {
-			movies = MovieDAO.getAllParam(titleSearch, genreSearch, distributorSearch, countrySearch);
+			movies = MovieDAO.getAllParam(titleSearch, genreSearch, distributorSearch, countrySearch, sortBy);
+			
 			
 			message="uspesno";
 			status = "success";
