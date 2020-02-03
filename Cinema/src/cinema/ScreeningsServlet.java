@@ -50,11 +50,7 @@ public class ScreeningsServlet extends HttpServlet {
 		User loggedInUser = (User)session.getAttribute("loggedInUser");
 		List<Screening> screenings = new ArrayList<>();
 		List<Movie> movies = new ArrayList<>();
-		List<Auditorium> auditoriums = new ArrayList<>();
- 		String idScreenType = request.getParameter("idScreenType");
 		
-		System.out.println("id sckrin tajpa jeee" + idScreenType);
-		List<ScreenType> screentypes = new ArrayList<>();
 		
 		String movieSearch = Util.createParam(request.getParameter("movieSearch"));
 	//	String datetimeSearch = Util.createParam(request.getParameter("datetimeSearch"));
@@ -69,13 +65,8 @@ public class ScreeningsServlet extends HttpServlet {
 		try {
 			
 			movies = MovieDAO.getAll();
-			screentypes = ScreenTypeDAO.getAll();
 			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch);
-			if(idScreenType != null) {
-				System.out.println("idScreenType" + idScreenType);
-				auditoriums = AuditoriumDAO.getAllAuditoriumsforType(Integer.parseInt(idScreenType));
-				System.out.println("auditoriumss" + auditoriums);
-			}
+		
 			
 			
 			message = "uspesno";
@@ -94,8 +85,6 @@ public class ScreeningsServlet extends HttpServlet {
 		data.put("screenings", screenings);
 		data.put("loggedInUser", loggedInUser);
 		data.put("movies", movies);
-		data.put("auditoriums", auditoriums);
-		data.put("screentypes", screentypes);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonData = mapper.writeValueAsString(data);

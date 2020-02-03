@@ -102,4 +102,24 @@
     <servlet-name>Movies2Servlet</servlet-name>
     <url-pattern>/Movies2Servlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ScreentypeServlet</display-name>
+    <servlet-name>ScreentypeServlet</servlet-name>
+    <servlet-class>cinema.ScreentypeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ScreentypeServlet</servlet-name>
+    <url-pattern>/ScreentypeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AuditoriumServlet</display-name>
+    <servlet-name>AuditoriumServlet</servlet-name>
+    <servlet-class>cinema.AuditoriumServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AuditoriumServlet</servlet-name>
+    <url-pattern>/AuditoriumServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -126,7 +126,7 @@ public class Movies2Servlet extends HttpServlet {
 					
 				}
 				
-				message = "Uspesno ste dodali film.";
+				message = "uspesno";
 				status = "success";
 				
 				break;

@@ -83,7 +83,6 @@ $(document).ready(function(e){
 			success: function(response){
 				if(response.status == "success"){
 					console.log("projekcije su: " + response.screenings);
-					console.log("whaat")
 					initScreenings(response.screenings)
 					console.log("loggedInUser je"+ response.loggedInUser);
 					showHide(response.loggedInUser);
@@ -139,13 +138,13 @@ $(document).ready(function(e){
 			
 		}
 	};
-	$("#selectScreentype").hide();
+/*	$("#selectScreentype").hide();
 	$("#selectScrtypeBtn").click(function (e){
 		$("#selectScreentype").show();
-		console.log("select skrin tajpsss plssss")
+		console.log("select skrin tajpsss plssss")*/
 		
 		$.ajax({
-			url:'ScreeningsServlet',
+			url:'ScreentypeServlet',
 			method: 'GET',
 			dataType: 'json',
 			success: function(response){
@@ -162,8 +161,7 @@ $(document).ready(function(e){
 			}
 		});
 		
-	});
-	
+		
 	function initScreentypes(screentypes){
 		 var $select = $("#selectScreentype");
 	//	 $select.find("option").remove(); 
@@ -180,7 +178,7 @@ $(document).ready(function(e){
 			}) ; 
 			console.log("params " + params)
 			$.ajax({
-				url : 'ScreeningsServlet',
+				url : 'AuditoriumServlet',
 				method: 'GET',
 				data : params,
 				dataType: 'json',
