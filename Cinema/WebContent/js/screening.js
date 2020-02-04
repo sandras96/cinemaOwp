@@ -8,7 +8,7 @@ $(document).ready(function(e){
 	function addScreening(s){
 		
 		var title = $('<div class="col-md-8"><h2 class="movie-title"><a href="/Cinema/singleMovie.html?id='+s.movie.id+'"</a>'+s.movie.title+'</h2>');
-		var date = $('<div class="movie-summary"><p>'+s.datetime+' </p></div>');
+		var date = $('<div class="movie-summary"><b>datetime: </b>'+formatDate(new Date(s.datetime))+'</div>');
 		var data = $('<ul class="movie-meta">'
 						+'<li><strong>Directors:</strong>'+s.screentype.name+'</li>'
 						+'<li><strong>Actors:</strong>'+s.auditorium.name+'</li>'

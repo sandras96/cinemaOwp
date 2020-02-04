@@ -29,7 +29,7 @@ $(document).ready(function(e){
 	
 	function initUser(u, loggedInUser){
 		var username = $('<h4><b>Username: </b>'+u.username+'</h4> ');
-		var registrationDate = $(' <p><b>Registration date: </b>'+u.datetime+'</p> ');
+		var registrationDate = $(' <p><b>Registration date: </b>'+formatDate(new Date(u.datetime))+'</p> ');
 		var role = $('<p><b>Role: </b>'+u.role+'</p>');
 		var pencil = $('<p><button data-toggle="modal" type="button" data-target="#editUser" class="glyphicon glyphicon-pencil"></button></p> ');
 
@@ -46,15 +46,7 @@ $(document).ready(function(e){
 			if(loggedInUser.username != u.username){
 				deleteUserBtn.show();
 			}
-			
 		}
-		
-	
-			
-	
-		
-		
-		
 	};
 	
 	deleteUserBtn.click(function(e){

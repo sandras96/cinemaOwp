@@ -21,4 +21,16 @@ public class Util {
 		return true;
 		
 	}
+	
+	public static long createDateParam(String param, String direction) {
+		if (Util.isNumeric(param)) {
+			return Integer.parseInt(param);
+		} else {
+			if (direction.equals("max")) {
+				return Long.MAX_VALUE; // vratimo maksimalan integer
+			} else {
+				return 0; // minimalan datum, epoch time od 1.1.1970
+			}
+		}
+	}
 }

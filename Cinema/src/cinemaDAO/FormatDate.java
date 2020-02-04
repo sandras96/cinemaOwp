@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class FormatDate {
 	
-	public static String DATETIME_FORMAT = "dd-MM-yyyy HH:mmM:ss";
+	public static String DATETIME_FORMAT = "dd-MM-yyyy HH:mm";
 
 	public static Date parseDate(String date) throws ParseException {
 		DateFormat dateFormat = new SimpleDateFormat(DATETIME_FORMAT);

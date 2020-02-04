@@ -50,13 +50,37 @@ public class ScreeningsServlet extends HttpServlet {
 		User loggedInUser = (User)session.getAttribute("loggedInUser");
 		List<Screening> screenings = new ArrayList<>();
 		List<Movie> movies = new ArrayList<>();
-		
+		long dateFrom;
+		long dateTo;
 		
 		String movieSearch = Util.createParam(request.getParameter("movieSearch"));
 	//	String datetimeSearch = Util.createParam(request.getParameter("datetimeSearch"));
 		String screentypeSearch = Util.createParam(request.getParameter("screentypeSearch"));
 		String auditoriumSearch = Util.createParam(request.getParameter("auditoriumSearch"));
+		/*double ticketPrice1 = Double.valueOf(request.getParameter("ticketPrice1"));
+		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));
 		
+		/*long dateFrom = Util.createDateParam(request.getParameter("dateFrom"), "min");
+		long dateTo = Util.createDateParam(request.getParameter("dateTo"), "max");*/
+		
+		/*long param = Long.parseLong(request.getParameter("dateFrom"));
+		long param2 = Long.parseLong(request.getParameter("dateTo"));*/
+		
+		String param = request.getParameter("dateFrom");
+		String param2 = request.getParameter("dateTo");
+		
+		if(param.equals("")) {
+			dateFrom = 0;
+		}else {
+			dateFrom = Long.parseLong(param);
+		}
+		
+		if(param2.equals("")) {
+			dateTo = Long.MAX_VALUE;
+		}else {
+			dateTo = Long.parseLong(param2);
+		}
+		System.out.println("datumi suu" + dateFrom + "  " + dateTo);
 	//	String ticketPriceSearch = Util.createParam(request.getParameter("ticketPriceSearch"));
 		String sortBy = request.getParameter("sortBy");
 		
@@ -67,7 +91,7 @@ public class ScreeningsServlet extends HttpServlet {
 		try {
 			
 			movies = MovieDAO.getAll();
-			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, sortBy);
+			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, dateFrom, dateTo, sortBy);
 		
 			
 			
@@ -106,7 +130,8 @@ public class ScreeningsServlet extends HttpServlet {
 		String movieId = request.getParameter("movieId");
 		String auditoriumId = request.getParameter("auditoriumId");
 		String screentypeId = request.getParameter("screentypeId");
-		String date = request.getParameter("date");
+		String datetime = request.getParameter("datetime");
+		
 		String ticketPrice = request.getParameter("ticketPrice");
 		String action = request.getParameter("action");
 		Screening screening = null;
@@ -123,12 +148,12 @@ public class ScreeningsServlet extends HttpServlet {
 			Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
 			Auditorium auditorium = AuditoriumDAO.getById(Integer.parseInt(auditoriumId));
 			ScreenType screentype = ScreenTypeDAO.getById(Integer.parseInt(screentypeId));
-			Date date1 = new Date();
 			screening = new Screening();
+			Date date = new Date(Long.parseLong(datetime));
 			screening.setMovie(movie);
 			screening.setAuditorium(auditorium);
 			screening.setScreentype(screentype);
-			screening.setDatetime(date1);
+			screening.setDatetime(date);
 			screening.setTicketPrice(Double.valueOf(ticketPrice));
 			screening.setUser(loggedInUser);
 			ScreeningDAO.createScreening(screening);

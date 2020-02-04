@@ -141,8 +141,8 @@
 									  <option value="">Sort by</option>
 									  <option value="m.title asc">movie title asc</option>
 									  <option value="m.title desc">movie title desc</option>
-									 <!--  <option value="datetime asc">datetime asc</option>
-									  <option value="datetime desc">datetime desc</option> -->
+								 	  <option value="datetime asc">datetime asc</option>
+									  <option value="datetime desc">datetime desc</option>
 									  <option value="sct.name asc">screentype asc</option>
 									  <option value="sct.name desc">screentype desc</option>
 									  <option value="a.name asc">auditorium asc</option>
@@ -183,13 +183,15 @@
 		      			<option value="2">sala2</option> -->
 		      			</select>
 		      		</div>
+		      		<div><label>Put date and time:</label> <br/>
+		      		<input type="datetime-local" id="datetimePicker" required></div>
+		      		<br/>
+		      		<div>
+		      		
 		      		<label for="priceTicket">Put ticket price:</label>
 					<input id=priceTicket style="width:20%" type="text" class="form-control">
-		      		<div class="modal-body">
-							<div class="form-group">
-								<label for="datetime">Choose date:</label>
-								 <input id=datetime type="text" class="form-control">
-							</div>
+					</div>
+		      			
 						<div class="modal-footer">
 							<button type="submit" id="saveScreening2"  class="btn btn-success">Save</button>
 						</div>
@@ -197,13 +199,13 @@
 				</div>
 			</div>
 			</div>
-			</div>
 	<!-- Page Content -->
 	
 	<table id="myTable">
 		<tr class="header">
 			<th style="width: 40%;">Movies<span><input id="movieSearch" type="text"></span></th>
-			<th style="width: 40%;">Date and time<span><input id="datetimeSearch" type="text"></span></th>
+			<th style="width: 40%;">Date and time<span><br/>from:<input id="dateFrom" type="datetime-local"><br/>
+													   to:<input id="dateTo" type="datetime-local"></span></th>
 			<th style="width: 40%;">ScreeningType<span> <select id="screentypeSearch">
 											<option value=""> All </option>
 											<option value="2D"> 2D </option>
@@ -218,7 +220,8 @@
 											<option value="sala3"> sala3 </option>
 											<option value="sala4"> sala4 </option>
 										</select></span></th>
-			<th style="width: 40%;">Ticket price<span><input id="ticketPriceSearch" type="text"></span></th>
+			<th style="width: 40%;">Ticket price<span><br/>from: <input id="ticketPrice1" type="text" style="width:100%">to: 
+			<input id="ticketPrice2" type="text" style="width:100%" min=""></span></th>
 
 		</tr>
 		<tbody id="screeningsDiv">

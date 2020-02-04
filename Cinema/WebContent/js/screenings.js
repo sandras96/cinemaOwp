@@ -42,7 +42,7 @@ $(document).ready(function(e){
 	function appendScreening(s){
 		var tableRow = $('<tr>');
 		var movies = $('<td><a href="/Cinema/singleScreen.html?id='+s.id+'"</a>'+s.movie.title+'</div>');
-		var dateTime = $('<td>'+s.datetime+'</td>');
+		var dateTime = $('<td>'+formatDate(new Date(s.datetime))+'</td>');
 		var typeScreen = $('<td>'+s.screentype.name+'</td>');
 		var auditorium = $('<td>'+s.auditorium.name+'</td>');
 		var ticketPrice = $('<td>'+s.ticketPrice+'</td></tr>');
@@ -57,26 +57,51 @@ $(document).ready(function(e){
 		
 	}
 	
+
+	var dateTo;
+	var dateFrom;
+	$("#dateFrom").on("change", function(e){
+		dateFrom = new Date($(this).val()).getTime();
+		
+		document.getElementById("dateTo").min = dateFrom;
+		
+	//	getScreenings();
+		
+		console.log(dateFrom);
+	});
+	$("#dateTo").on("change", function(e){
+		dateTo = new Date($(this).val()).getTime();
+		getScreenings();
+		console.log(dateTo);
+	});
+	
+	
 	
 	function getScreenings(){
 		var movieSearch = $("#movieSearch").val();
-		var datetimeSearch = $("#datetimeSearch").val();
+	//	var datetimeSearch = $("#datetimeSearch").val();
 		var screentypeSearch = $("#screentypeSearch").find(":selected").val();
 		var auditoriumSearch = $("#auditoriumSearch").find(":selected").val();
 		var ticketPriceSearch = $("#ticketPriceSearch").val();
 		var sortBy = $('#sortByScr').find(":selected").val();
+		var ticketPrice1 = $("#ticketPrice1").val();
+		var ticketPrice2 = $("#ticketPrice2").val();
 		
 		var params = $.param({
 			movieSearch : movieSearch,
-			datetimeSearch : datetimeSearch,
+	//		datetimeSearch : datetimeSearch,
 			screentypeSearch : screentypeSearch,
 			auditoriumSearch : auditoriumSearch,
 			ticketPriceSearch : ticketPriceSearch,
+			dateFrom : dateFrom,
+			dateTo : dateTo,
+			ticketPrice1 : ticketPrice1,
+			ticketPrice2 : ticketPrice2,
 			sortBy : sortBy,
 			
 		});
 		
-		console.log(params)
+		console.log("datumi su od :" + dateFrom + "do:" + dateTo);
 		$.ajax({
 			url:'ScreeningsServlet',
 			method: 'GET',
@@ -138,6 +163,7 @@ $(document).ready(function(e){
 //	});
 	function initMovies(movies){
 		 var $select = $("#selMovies");
+		 $select.find("option").remove(); 
 		for (var i = 0; i < movies.length; i++) {
 			 $("<option>").val(movies[i].id).text(movies[i].title).appendTo($select);
 			
@@ -209,27 +235,31 @@ $(document).ready(function(e){
 		}
 	};
 	
+	var datetime;
+	$("#datetimePicker").on("change", function(e){
+		datetime = new Date($(this).val()).getTime();
+		
+	});
 	
 	var saveScreening = $('#saveScreening2') ;
 	saveScreening.click(function(e){
 		e.preventDefault();
-		console.log("save skrinn")
+		console.log("dt je " + datetime);
 		var movie = $('#selMovies').find(":selected").val();
 		var screentype = $('#selectScreentype').find(":selected").val();
 		var auditorium = $('#selectAuditorium').find(":selected").val();
-		var date = $('#datetime').val();
 		var ticketPrice = $('#priceTicket').val();
 		
 		var params = $.param({
 			movieId : movie,
 			screentypeId : screentype,
 			auditoriumId : auditorium,
-			date : date,
+			datetime : datetime,
 			ticketPrice : ticketPrice,
 			action : "add",
 			
 		});
-		console.log(params + "parametri za skrinnn")
+		console.log(params + "parametri za skrinnn" + "datummm je " + datetime)
 		$.ajax({
 			url : 'ScreeningsServlet',
 			method : 'POST',
@@ -251,6 +281,10 @@ $(document).ready(function(e){
 		$('#addScreening').modal('toggle');
 		
 	});
+	
+	
+	
+
 	
 });
 

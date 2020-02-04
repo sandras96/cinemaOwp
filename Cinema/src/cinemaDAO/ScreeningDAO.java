@@ -16,7 +16,7 @@ import model.User;
 public class ScreeningDAO {
 
 	public static List<Screening> getAll(String movieParam, String scrtypeParam,
-			String auditParam, String sortBy) throws Exception {
+			String auditParam, long dateFrom, long dateTo, String sortBy) throws Exception {
 
 		Connection conn = ConnectionManager.getConnection();
 		List<Screening> screenings = new ArrayList<>();
@@ -39,13 +39,18 @@ public class ScreeningDAO {
 					"    a.name like ? and" + 
 					"    sct.name like ? and" + 
 					"    m.title like ? and "+
-					"	 scr.deleted = 0 "+
+					"	 scr.deleted = 0 and "+
+					"	 scr.datetime > ? and " + // datum od
+					"	 scr.datetime < ? " +     // datum do
 					"    order by " + orderBy + ";";
 			
 			ps = conn.prepareStatement(query);
 			ps.setString(1, auditParam);
 			ps.setString(2, scrtypeParam);
 			ps.setString(3, movieParam);
+			ps.setLong(4, dateFrom);
+			ps.setLong(5, dateTo);
+		
 			rs = ps.executeQuery();
 			System.out.println("kveri je " + query + "order by je "+ orderBy);
 			while (rs.next()) {
@@ -54,7 +59,7 @@ public class ScreeningDAO {
 				Movie movie = MovieDAO.getById(rs.getInt(index++));
 				ScreenType screenType = ScreenTypeDAO.getById(rs.getInt(index++));
 				Auditorium auditorium = AuditoriumDAO.getById(rs.getInt(index++));
-				Date datetime = FormatDate.parseDate(rs.getString(index++));
+				Date datetime = new Date(rs.getLong(index++));
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
 				boolean deleted = rs.getBoolean(index++);
@@ -100,7 +105,7 @@ public class ScreeningDAO {
 				Movie movie = MovieDAO.getById(rs.getInt(index++));
 				ScreenType screenType = ScreenTypeDAO.getById(rs.getInt(index++));
 				Auditorium auditorium = AuditoriumDAO.getById(rs.getInt(index++));
-				Date datetime = FormatDate.parseDate(rs.getString(index++));
+				Date datetime = new Date(rs.getLong(index++));
 				double ticketPrice = rs.getDouble(index++);
 				User user = UserDAO.getByUsername(rs.getString(index++));
 				boolean deleted = rs.getBoolean(index++);
@@ -139,7 +144,7 @@ public class ScreeningDAO {
 			ps.setInt(index++, screening.getMovie().getId());
 			ps.setInt(index++, screening.getScreentype().getId());
 			ps.setInt(index++, screening.getAuditorium().getId());
-			ps.setString(index++, FormatDate.formatDate(screening.getDatetime()));
+			ps.setLong(index++, screening.getDatetime().getTime());
 			ps.setDouble(index++, screening.getTicketPrice());
 			ps.setString(index++, screening.getUser().getUsername());
 			ps.setBoolean(index++, screening.isDeleted());

@@ -23,7 +23,6 @@ $(document).ready(function(e){
 				if(response.status == "success"){
 					console.log(response.loggedInUser.username);
 					window.location.replace('/Cinema/user.html?username='+ response.loggedInUser.username)
-					showHide(response.loggedInUser)
 				}else{
 					alert(response.message);
 				}

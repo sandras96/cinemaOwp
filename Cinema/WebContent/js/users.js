@@ -17,7 +17,7 @@ $(document).ready(function(e){
 	function appendUser(user){
 		var tableRow= $('<tr></tr>');
 		var name = $('<td><a href="/Cinema/user.html?username='+user.username+'"</a>'+user.username+'</div>');
-		var datetime = $('<td>'+user.datetime+'</td>');
+		var datetime = $('<td>'+formatDate(new Date(user.datetime))+'</td>');
 		var role = $('<td>'+user.role+'</td>');
 
 		tableRow.append(name);

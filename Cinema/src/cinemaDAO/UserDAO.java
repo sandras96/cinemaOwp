@@ -37,7 +37,7 @@ public class UserDAO {
 				int index = 1;
 				String username = rs.getString(index++);
 				String password = rs.getString(index++);
-				Date datetime = FormatDate.parseDate(rs.getString(index++));
+				Date datetime = new Date(rs.getLong(index++));
 				Role role = Role.valueOf(rs.getString(index++));
 				boolean deleted = rs.getBoolean(index++);
 
@@ -85,7 +85,7 @@ public class UserDAO {
 				int index = 1;
 				String username1 = rs.getString(index++);
 				String password = rs.getString(index++);
-				Date datetime = FormatDate.parseDate(rs.getString(index++));
+				Date datetime = new Date(rs.getLong(index++));
 				Role role = Role.valueOf(rs.getString(index++));
 				boolean deleted = rs.getBoolean(index++);
 
@@ -124,7 +124,7 @@ public class UserDAO {
 			ps = conn.prepareStatement(query);
 			ps.setString(index++, user.getUsername());
 			ps.setString(index++, user.getPassword());
-			ps.setString(index++, FormatDate.formatDate(user.getDatetime()));
+			ps.setLong(index++, user.getDatetime().getTime());
 			ps.setString(index++, user.getRole().toString());
 			ps.setBoolean(index++, user.isDeleted());
 
@@ -154,7 +154,7 @@ public class UserDAO {
 			int index = 1;
 			ps = conn.prepareStatement(query);
 			ps.setString(index++, user.getPassword());
-			ps.setString(index++, FormatDate.formatDate(user.getDatetime()));
+			ps.setLong(index++, user.getDatetime().getTime());
 			ps.setString(index++, user.getRole().toString());
 			ps.setBoolean(index++, user.isDeleted());
 			ps.setString(index++, user.getUsername());
