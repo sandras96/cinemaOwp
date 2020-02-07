@@ -1,5 +1,7 @@
 package cinemaDAO;
 
+import java.util.Date;
+
 public class Util {
 
 	
@@ -22,15 +24,21 @@ public class Util {
 		
 	}
 	
-	public static long createDateParam(String param, String direction) {
-		if (Util.isNumeric(param)) {
-			return Integer.parseInt(param);
+	
+	public static long dateParam(String param) {
+		if (param == null || param.isEmpty()) {
+			return 0;
 		} else {
-			if (direction.equals("max")) {
-				return Long.MAX_VALUE; // vratimo maksimalan integer
-			} else {
-				return 0; // minimalan datum, epoch time od 1.1.1970
-			}
+			return Long.parseLong(param);
 		}
 	}
+	
+	public static long dateParamTo(String param) {
+		if (param == null || param.isEmpty()) {
+			return Long.MAX_VALUE;
+		} else {
+			return Long.parseLong(param);
+					}
+			}
+	
 }
