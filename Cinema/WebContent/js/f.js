@@ -75,8 +75,4 @@ var test3 = function test3(depTime){
 	return depTime = x.split(":")[0] + ":" + x.split(":")[1];
 	//2020-02-29T00:59
 }
-var test4 = function test4(depTime){
-	var x = new Date(depTime).toISOString();
-	return depTime = x.split("T")[1];
-	//2020-02-29T00:59
-}
+

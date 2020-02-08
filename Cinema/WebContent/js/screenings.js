@@ -2,7 +2,8 @@ $(document).ready(function(e){
 	
 	var screeningsDiv = $('#screeningsDiv');
 	getScreenings();
-	
+	document.getElementById("selectScreentype").disabled = true;
+	document.getElementById("selectAuditorium").disabled = true;
 	var liUsers = $('#liUsers');
 	liUsers.hide();
 	var liMyProfile = $('#liMyProfile');
@@ -58,12 +59,33 @@ $(document).ready(function(e){
 	}
 	
 
-	var dateTo;
 	var dateFrom;
+	var dateTo;
 	$("#dateFrom").on("change", function(e){
 		dateFrom = new Date($(this).val()).getTime();
 		
-		document.getElementById("dateTo").min = dateFrom;
+		 var date = new Date(dateFrom); 
+		 var x = test3(date);
+		 document.getElementById("dateTo").min = x;
+		 console.log(x);
+		 
+		/* var y = test4(date);
+		 console.log("y je " + y);*/
+		
+		
+	//	 var x = date.toUTCString();
+	//	 var x = date.toString();
+	//	 console.log("proba 555"+ x);
+		
+	/*	var depTime = new Date(1581724800000).toISOString();
+		 console.log(depTime.split(":")[0]);
+		 console.log(depTime.split(":")[1]);
+		 console.log(depTime.split(":")[0]);
+		 console.log("datum je " + (depTime.split(":")[0]) + 1 + ":" + depTime.split(":")[1]);
+		 var a = depTime.split(":")[0] + ":" + depTime.split(":")[1];
+		 console.log("umrecu " + depTime);*/
+		 
+//
 		
 	//	getScreenings();
 		
@@ -71,15 +93,19 @@ $(document).ready(function(e){
 	});
 	$("#dateTo").on("change", function(e){
 		dateTo = new Date($(this).val()).getTime();
-		getScreenings();
-		console.log(dateTo);
+		if(dateTo < dateFrom){
+			document.getElementById("demo").innerHTML = "Wrong date";
+			screeningsDiv.empty();
+		}else{
+			document.getElementById("demo").innerHTML = "";
+			getScreenings();
+		}
 	});
 	
 	
 	
 	function getScreenings(){
 		var movieSearch = $("#movieSearch").val();
-	//	var datetimeSearch = $("#datetimeSearch").val();
 		var screentypeSearch = $("#screentypeSearch").find(":selected").val();
 		var auditoriumSearch = $("#auditoriumSearch").find(":selected").val();
 		var ticketPriceSearch = $("#ticketPriceSearch").val();
@@ -89,7 +115,6 @@ $(document).ready(function(e){
 		
 		var params = $.param({
 			movieSearch : movieSearch,
-	//		datetimeSearch : datetimeSearch,
 			screentypeSearch : screentypeSearch,
 			auditoriumSearch : auditoriumSearch,
 			ticketPriceSearch : ticketPriceSearch,
@@ -144,23 +169,6 @@ $(document).ready(function(e){
 	});
 	
 	
-//	$.ajax({
-//		url:'ScreeningsServlet',
-//		method: 'GET',
-//		dataType: 'json',
-//		success: function(response){
-//			if(response.status == "success"){
-//				console.log("dobila sam a" + response.movies)
-//				initMovies(response.movies);
-//			
-//			}else{
-//				alert(response.message);
-//			}
-//		},
-//		error: function(request, message, error){
-//			alert(error);
-//		}
-//	});
 	function initMovies(movies){
 		 var $select = $("#selMovies");
 		 $select.find("option").remove(); 
@@ -169,8 +177,6 @@ $(document).ready(function(e){
 			
 		}
 	};
-
-		
 		$.ajax({
 			url:'ScreentypeServlet',
 			method: 'GET',
@@ -199,10 +205,14 @@ $(document).ready(function(e){
 		$select.change(function(){
 			console.log("changeee skrin tajps")
 			
+			var movie = $('#selMovies').find(":selected").val();
 			var idScrtype = $(this).children("option:selected").val();
+			var datetime = new Date($("#datetimePicker").val()).getTime();
 			
 			var params = $.param({
 				idScreenType : idScrtype,
+				datetime : datetime,
+				movie : movie,
 			}) ; 
 			console.log("params " + params)
 			$.ajax({
@@ -236,20 +246,36 @@ $(document).ready(function(e){
 	};
 	
 	var datetime;
+	var date = test3(new Date().getTime());
+	document.getElementById("datetimePicker").min = date;
 	$("#datetimePicker").on("change", function(e){
 		datetime = new Date($(this).val()).getTime();
+		console.log(datetime);
+		var newDate = new Date().getTime();
+		if(datetime < newDate){
+			document.getElementById("demo2").innerHTML = "Wrong date";
+			document.getElementById("saveScreening2").disabled = true;
+			document.getElementById("selectScreentype").disabled = true;
+			document.getElementById("selectAuditorium").disabled = true;
+		}else{
+			document.getElementById("demo2").innerHTML = "";
+			document.getElementById("saveScreening2").disabled = false;
+			document.getElementById("selectScreentype").disabled = false;
+			document.getElementById("selectAuditorium").disabled = false;
+			
+		}
 		
 	});
 	
 	var saveScreening = $('#saveScreening2') ;
 	saveScreening.click(function(e){
+		
 		e.preventDefault();
-		console.log("dt je " + datetime);
 		var movie = $('#selMovies').find(":selected").val();
 		var screentype = $('#selectScreentype').find(":selected").val();
 		var auditorium = $('#selectAuditorium').find(":selected").val();
 		var ticketPrice = $('#priceTicket').val();
-		
+			
 		var params = $.param({
 			movieId : movie,
 			screentypeId : screentype,
@@ -267,7 +293,7 @@ $(document).ready(function(e){
 			dataType : 'json',
 			success : function(response){
 				if(response.status == "succcess"){
-					location.reload();
+					alert(response.message);
 					console.log("Nova projekcija je: " + response.screening)
 				}else{
 					alert(response.message);
@@ -279,6 +305,7 @@ $(document).ready(function(e){
 		});
 		
 		$('#addScreening').modal('toggle');
+		location.reload();
 		
 	});
 	

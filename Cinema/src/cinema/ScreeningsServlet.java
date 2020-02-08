@@ -3,7 +3,9 @@ package cinema;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.AuditoriumDAO;
+import cinemaDAO.FormatDate;
 import cinemaDAO.MovieDAO;
 import cinemaDAO.ScreenTypeDAO;
 import cinemaDAO.ScreeningDAO;
@@ -26,6 +29,8 @@ import model.ScreenType;
 import model.Screening;
 import model.User;
 import model.User.Role;
+import java.text.DateFormat; 
+import java.text.SimpleDateFormat;
 
 /**
  * Servlet implementation class ScreeningsServlet
@@ -50,36 +55,22 @@ public class ScreeningsServlet extends HttpServlet {
 		User loggedInUser = (User)session.getAttribute("loggedInUser");
 		List<Screening> screenings = new ArrayList<>();
 		List<Movie> movies = new ArrayList<>();
-		long dateFrom;
-		long dateTo;
+	
 		
 		String movieSearch = Util.createParam(request.getParameter("movieSearch"));
-	//	String datetimeSearch = Util.createParam(request.getParameter("datetimeSearch"));
 		String screentypeSearch = Util.createParam(request.getParameter("screentypeSearch"));
 		String auditoriumSearch = Util.createParam(request.getParameter("auditoriumSearch"));
 		/*double ticketPrice1 = Double.valueOf(request.getParameter("ticketPrice1"));
-		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));
+		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));*/
 		
-		/*long dateFrom = Util.createDateParam(request.getParameter("dateFrom"), "min");
-		long dateTo = Util.createDateParam(request.getParameter("dateTo"), "max");*/
 		
-		/*long param = Long.parseLong(request.getParameter("dateFrom"));
-		long param2 = Long.parseLong(request.getParameter("dateTo"));*/
 		
-		String param = request.getParameter("dateFrom");
-		String param2 = request.getParameter("dateTo");
+	
+		long dateFrom = Util.dateParam(request.getParameter("dateFrom"));
+		long dateTo = Util.dateParamTo(request.getParameter("dateTo"));
 		
-		if(param.equals("")) {
-			dateFrom = 0;
-		}else {
-			dateFrom = Long.parseLong(param);
-		}
 		
-		if(param2.equals("")) {
-			dateTo = Long.MAX_VALUE;
-		}else {
-			dateTo = Long.parseLong(param2);
-		}
+
 		System.out.println("datumi suu" + dateFrom + "  " + dateTo);
 	//	String ticketPriceSearch = Util.createParam(request.getParameter("ticketPriceSearch"));
 		String sortBy = request.getParameter("sortBy");
@@ -89,18 +80,19 @@ public class ScreeningsServlet extends HttpServlet {
 		String status = "";
 		
 		try {
-			
+			if(dateFrom > dateTo) {
+				throw new Exception("wrong date");
+			}
 			movies = MovieDAO.getAll();
 			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, dateFrom, dateTo, sortBy);
 		
-			
 			
 			message = "uspesno";
 			status = "success";
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			message = e.getMessage();
 			status = "failure";
 			
 		}
@@ -130,7 +122,11 @@ public class ScreeningsServlet extends HttpServlet {
 		String movieId = request.getParameter("movieId");
 		String auditoriumId = request.getParameter("auditoriumId");
 		String screentypeId = request.getParameter("screentypeId");
-		String datetime = request.getParameter("datetime");
+		
+		long datetime = Util.dateParam(request.getParameter("datetime"));
+		
+		Date date = new Date(datetime);
+		System.out.println("long je " + date);
 		
 		String ticketPrice = request.getParameter("ticketPrice");
 		String action = request.getParameter("action");
@@ -142,14 +138,29 @@ public class ScreeningsServlet extends HttpServlet {
 			if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 				throw new Exception("Access denied");
 			}
+			Calendar calendar = FormatDate.dateToCalendar(date);
+			long datetimeStart = ((calendar).getTime()).getTime();
 			switch (action) {
 		case "add":
-			
+			Date date2 = new Date();
+			if(date.compareTo(date2) < 0) {
+				throw new Exception("wrong date");
+			}
 			Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
 			Auditorium auditorium = AuditoriumDAO.getById(Integer.parseInt(auditoriumId));
+			List<Auditorium> freeauditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(screentypeId), datetime, datetimeStart);
+			boolean validAuditorium = false;
+			for (Auditorium a : freeauditoriums) {
+				if(auditorium.getId() == a.getId()) {
+					validAuditorium = true;
+					break;
+				}
+			}
+			if (!validAuditorium ) { 
+				throw new Exception("Auditorium is not available");
+				}
 			ScreenType screentype = ScreenTypeDAO.getById(Integer.parseInt(screentypeId));
 			screening = new Screening();
-			Date date = new Date(Long.parseLong(datetime));
 			screening.setMovie(movie);
 			screening.setAuditorium(auditorium);
 			screening.setScreentype(screentype);

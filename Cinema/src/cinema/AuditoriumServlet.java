@@ -2,6 +2,8 @@ package cinema;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +17,11 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.AuditoriumDAO;
-import cinemaDAO.ScreenTypeDAO;
+import cinemaDAO.FormatDate;
+import cinemaDAO.MovieDAO;
 import model.Auditorium;
+import model.Movie;
 import model.User;
-import model.User.Role;
 
 /**
  * Servlet implementation class AuditoriumServlet
@@ -39,19 +42,35 @@ public class AuditoriumServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
 		HttpSession session = request.getSession();
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		String idScreenType = request.getParameter("idScreenType");
+		long datetime = Long.parseLong(request.getParameter("datetime"));
+		String movieId = request.getParameter("movie");
+		
+		System.out.println("datetime sa fronta je " + datetime);
+		
+		Date date = new Date(datetime);
 		
 		List<Auditorium> auditoriums = new ArrayList<>();
-		
+		List<Auditorium> freeauditoriums = new ArrayList<>();
 		
 		String message = "";
 		String status = "";
 		
 		try {
+			
+			Calendar calendar = FormatDate.dateToCalendar(date);
+			long datetimeStart = ((calendar).getTime()).getTime();
+			
+			/*Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
+			long movieDuration = movie.getDuration() * 60000 + datetime;
+*/			
+			
 			if(idScreenType != null) {
-				auditoriums = AuditoriumDAO.getAllAuditoriumsforType(Integer.parseInt(idScreenType));
+				
+				auditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(idScreenType), datetime, datetimeStart);
 			}
 			
 			message = "uspesno";
@@ -79,6 +98,8 @@ public class AuditoriumServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+		
+		
 	}
 
 }
