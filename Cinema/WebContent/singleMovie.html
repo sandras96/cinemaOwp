@@ -13,6 +13,7 @@
 <script src="js/f.js"></script>
 <script src="js/login.js"></script>
 <script src="js/movie.js"></script>
+<script src="js/ticket.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/jquery-ui.css">
 <title>Cinema S</title>
@@ -37,7 +38,31 @@
         height: auto;
         -webkit-transition: .3s ease;
                 transition: .3s ease; }
- 
+  #myTable {
+	border-collapse: collapse;
+	width: 100%; 
+	border: 1px solid #ddd;
+	font-size: 18px;
+	margin: auto;
+	margin-block-end: 200px;
+}
+
+#myTable th, #myTable td {
+	text-align: center;
+	padding: 12px;
+}
+
+#myTable tr {
+	border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+	background-color: #f1f1f1;
+}
+
+#scrl {
+	margin-left: 270px;
+}
  </style>
 </head>
 
@@ -111,7 +136,67 @@
 				<figure class="movie-poster">
 					<img src="img/singleMimg.png" alt="#">
 				</figure>
-				<button type="button" class="glyphicon glyphicon-plus">buy ticket for this movie</button>
+				<button data-toggle="modal" type="button" data-target="#buyTicketModal" class="glyphicon glyphicon-plus" id="byticketBtn">buy ticket for this movie</button>
+				
+				<div id="buyTicketModal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<table id="myTable">
+		<tr class="header">
+			<th style="width: 20%;">Date and time</th>
+			<th style="width: 20%;">ScreeningType</th>
+			<th style="width: 20%;">Auditorium</th>
+			<th style="width: 20%;">Ticket price</th>
+			<th style="width: 20%;"></th>
+			
+		</tr>
+		<tbody id="screenings1Div">
+			<!--  <tr>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Germany</td>
+    </tr>
+    <tr>
+      <td>Berglunds snabbkop</td>
+      <td>Sweden</td>
+      <td>Alfreds Futterkiste</td>
+      <td>Germany</td>
+      <td>Germany</td>
+    </tr> -->
+
+		</tbody>
+	</table>
+					<div class="modal-body" id="divShowScreen">
+						<!--	<div class="form-group">
+								<label for="password" id="">Screening datetime:</label>
+							</div>
+							<div class="form-group">
+								<label for="password" id="">Screeningtype:</label>
+							</div>
+							<div class="form-group">
+								<label for="password" id="">Auditorium:</label>
+							</div>
+							<div class="form-group" id="">
+		      		<label for="">Choose seat:</label>
+		      		<select class="form-control" id="" style= "width:60px">
+		      			<option value="1">#1</option>
+		      			<option value="2">#2</option>
+		      			<option value="3">#3</option>
+		      			<option value="4">#3</option>
+		      			<option value="5">#3</option>
+		      			</select>
+		      		</div>
+						
+						</div> -->
+						
+					</div>
+				</div>
+			</div>
 			</div>
 			
 			<!--  <div class="col-md-6">

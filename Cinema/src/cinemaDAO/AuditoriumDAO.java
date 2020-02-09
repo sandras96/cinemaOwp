@@ -184,9 +184,7 @@ public class AuditoriumDAO {
 			}
 		}
 		
-catch (Exception e) {
-e.printStackTrace();
-}		
+	
 		
 		finally {
 			try {

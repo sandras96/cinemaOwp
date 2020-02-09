@@ -2,6 +2,7 @@ package model;
 
 public class Seat {
 	
+	private int id;
 	private int seatNO;
 	private Auditorium auditorium;
 	
@@ -10,14 +11,23 @@ public class Seat {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Seat(int seatNO, Auditorium auditorium) {
+	public Seat(int id, int seatNO, Auditorium auditorium) {
 		super();
+		this.id = id;
 		this.seatNO = seatNO;
 		this.auditorium = auditorium;
 	}
 
 	public int getSeatNO() {
 		return seatNO;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public void setSeatNO(int seatNO) {

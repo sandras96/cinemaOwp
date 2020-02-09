@@ -42,19 +42,14 @@ public class AuditoriumServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
-		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		String idScreenType = request.getParameter("idScreenType");
 		long datetime = Long.parseLong(request.getParameter("datetime"));
-		String movieId = request.getParameter("movie");
 		
 		System.out.println("datetime sa fronta je " + datetime);
 		
 		Date date = new Date(datetime);
 		
 		List<Auditorium> auditoriums = new ArrayList<>();
-		List<Auditorium> freeauditoriums = new ArrayList<>();
 		
 		String message = "";
 		String status = "";
@@ -63,10 +58,6 @@ public class AuditoriumServlet extends HttpServlet {
 			
 			Calendar calendar = FormatDate.dateToCalendar(date);
 			long datetimeStart = ((calendar).getTime()).getTime();
-			
-			/*Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
-			long movieDuration = movie.getDuration() * 60000 + datetime;
-*/			
 			
 			if(idScreenType != null) {
 				

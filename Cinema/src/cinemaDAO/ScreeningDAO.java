@@ -130,6 +130,65 @@ public class ScreeningDAO {
 		return null;
 	}
 
+	public static List<Screening> getByMovieId(Integer movieId, long date) throws Exception{
+		Connection conn = ConnectionManager.getConnection();
+		List<Screening> screenings = new ArrayList<>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			String query = "select * from screening s where movieId = ? and deleted = 0 and datetime > ? and s.auditoriumId in " + 
+					"    (select distinct s.auditoriumId from seat s where s.id not in " + 
+					"    (select t.seatId from ticket t left outer join screening s on t.screeningId = s.id " + 
+					"    left outer join seat se on se.id = t.seatId))" + 
+					"    order by datetime;";
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, movieId);
+			ps.setLong(2, date);
+			rs = ps.executeQuery();
+		
+			rs = ps.executeQuery();
+			System.out.println("kveri za projekcije za film je " + query);
+			while (rs.next()) {
+				int index = 1;
+				Integer screeningId = rs.getInt(index++);
+				Movie movie = MovieDAO.getById(rs.getInt(index++));
+				ScreenType screenType = ScreenTypeDAO.getById(rs.getInt(index++));
+				Auditorium auditorium = AuditoriumDAO.getById(rs.getInt(index++));
+				Date datetime = new Date(rs.getLong(index++));
+				double ticketPrice = rs.getDouble(index++);
+				User user = UserDAO.getByUsername(rs.getString(index++));
+				boolean deleted = rs.getBoolean(index++);
+				Screening screening = new Screening(screeningId, movie, screenType, auditorium, datetime, ticketPrice,user, deleted);
+				screenings.add(screening);
+				
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			}	
+		finally {
+			try {
+				ps.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+			try {
+				rs.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+			try {
+				conn.close();
+			} catch (Exception ex1) {
+				ex1.printStackTrace();
+			}
+		}
+		return screenings;
+
+}
+
 	public static boolean createScreening(Screening screening) throws Exception {
 
 		Connection conn = ConnectionManager.getConnection();

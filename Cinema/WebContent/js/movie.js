@@ -5,7 +5,6 @@ $(document).ready(function(e){
 	
 	var div1 = $('#div1');
 	
-	
 	var liUsers = $('#liUsers');
 	liUsers.hide();
 	var liMyProfile = $('#liMyProfile');
@@ -150,8 +149,9 @@ $(document).ready(function(e){
 					showHide(response.loggedInUser)
 					addMovie(response.movie, response.loggedInUser);
 					console.log("naslov filna "+ response.movie.title)
+					
 				}else{
-					alert.message;
+					alert(response.message);
 				}
 			},
 			error: function(request, message, error){

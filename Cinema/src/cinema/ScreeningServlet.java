@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cinemaDAO.MovieDAO;
 import cinemaDAO.ScreeningDAO;
-import model.Movie;
+import cinemaDAO.SeatDAO;
 import model.Screening;
+import model.Seat;
 
 /**
  * Servlet implementation class ScreeningServlet
@@ -39,10 +39,13 @@ public class ScreeningServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String id = request.getParameter("id");
 		Screening screening = null;
+		List<Seat> seats = new ArrayList<>();
 		String message = "";
 		String status = "";
 		try {
 			screening = ScreeningDAO.getById(Integer.parseInt(id));
+			seats = SeatDAO.getByAudId(screening.getAuditorium().getId(),screening.getId());
+			
 			
 			message="uspesno";
 			status = "success";
@@ -58,6 +61,8 @@ public class ScreeningServlet extends HttpServlet {
 		data.put("message", message);
 		data.put("status", status);
 		data.put("screening", screening);
+		data.put("seats", seats);
+		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonData = mapper.writeValueAsString(data);

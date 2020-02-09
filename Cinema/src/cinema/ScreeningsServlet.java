@@ -54,6 +54,7 @@ public class ScreeningsServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User loggedInUser = (User)session.getAttribute("loggedInUser");
 		List<Screening> screenings = new ArrayList<>();
+		
 		List<Movie> movies = new ArrayList<>();
 	
 		
@@ -64,7 +65,7 @@ public class ScreeningsServlet extends HttpServlet {
 		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));*/
 		
 		
-		
+	
 	
 		long dateFrom = Util.dateParam(request.getParameter("dateFrom"));
 		long dateTo = Util.dateParamTo(request.getParameter("dateTo"));
@@ -103,6 +104,7 @@ public class ScreeningsServlet extends HttpServlet {
 		data.put("screenings", screenings);
 		data.put("loggedInUser", loggedInUser);
 		data.put("movies", movies);
+		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonData = mapper.writeValueAsString(data);
