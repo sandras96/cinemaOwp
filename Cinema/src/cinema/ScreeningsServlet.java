@@ -66,12 +66,10 @@ public class ScreeningsServlet extends HttpServlet {
 		String movieSearch = Util.createParam(request.getParameter("movieSearch"));
 		String screentypeSearch = Util.createParam(request.getParameter("screentypeSearch"));
 		String auditoriumSearch = Util.createParam(request.getParameter("auditoriumSearch"));
-		/*double ticketPrice1 = Double.valueOf(request.getParameter("ticketPrice1"));
-		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));*/
-		
-		
-	
-	
+		double price1 = Util.createParamPriceFrom(request.getParameter("ticketPrice1"));
+//		double ticketPrice1 = Double.valueOf(request.getParameter("ticketPrice1"));
+//		double ticketPrice2 = Double.valueOf(request.getParameter("ticketPrice2"));
+		double price2 = Util.createParamPriceTo(request.getParameter("ticketPrice2"));
 		long dateFrom = Util.dateParam(request.getParameter("dateFrom"));
 		long dateTo = Util.dateParamTo(request.getParameter("dateTo"));
 		
@@ -90,7 +88,8 @@ public class ScreeningsServlet extends HttpServlet {
 				throw new Exception("wrong date");
 			}
 			movies = MovieDAO.getAll();
-			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, dateFrom, dateTo, sortBy);
+			screenings = ScreeningDAO.getAll(movieSearch, screentypeSearch, auditoriumSearch, dateFrom, 
+												dateTo,price1,price2,sortBy);
 		
 			
 			message = "uspesno";

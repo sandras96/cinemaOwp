@@ -142,4 +142,14 @@
     <servlet-name>SeatServlet</servlet-name>
     <url-pattern>/SeatServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TicketsForUserServlet</display-name>
+    <servlet-name>TicketsForUserServlet</servlet-name>
+    <servlet-class>cinema.TicketsForUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TicketsForUserServlet</servlet-name>
+    <url-pattern>/TicketsForUserServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -50,17 +50,19 @@ public class Movies2Servlet extends HttpServlet {
 		
 		String titleSearch = Util.createParam(request.getParameter("titleSearch"));
 		String genreSearch = Util.createParam(request.getParameter("genreSearch"));
-	//	String durationSearch = Util.createParam(request.getParameter("durationSearch"));
+		int durationSearchMin = Util.createParamBetweenMin(request.getParameter("durationSearch"));
+		int durationSearchMax = Util.createParamBetweenMax(request.getParameter("durationSearch"));
 		String distributorSearch = Util.createParam(request.getParameter("distributorSearch"));
 		String countrySearch = Util.createParam(request.getParameter("countrySearch"));
-	//	String yearSearch = Util.createParam(request.getParameter("yearSearch"));
+		int yearSearchMin = Util.createParamBetweenMin(request.getParameter("yearSearch"));
+		int yearSearchMax = Util.createParamBetweenMax(request.getParameter("yearSearch"));
 		String sortBy = request.getParameter("sortBy");
 		
 		String message = "";
 		String status = "";
 		
 		try {
-			movies = MovieDAO.getAllParam(titleSearch, genreSearch, distributorSearch, countrySearch, sortBy);
+			movies = MovieDAO.getAllParam(titleSearch, genreSearch, durationSearchMin,durationSearchMax, distributorSearch, countrySearch, yearSearchMin, yearSearchMax, sortBy);
 			
 			
 			message="uspesno";

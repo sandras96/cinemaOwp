@@ -68,27 +68,6 @@ $(document).ready(function(e){
 		 var x = test3(date);
 		 document.getElementById("dateTo").min = x;
 		 console.log(x);
-		 
-		/* var y = test4(date);
-		 console.log("y je " + y);*/
-		
-		
-	//	 var x = date.toUTCString();
-	//	 var x = date.toString();
-	//	 console.log("proba 555"+ x);
-		
-	/*	var depTime = new Date(1581724800000).toISOString();
-		 console.log(depTime.split(":")[0]);
-		 console.log(depTime.split(":")[1]);
-		 console.log(depTime.split(":")[0]);
-		 console.log("datum je " + (depTime.split(":")[0]) + 1 + ":" + depTime.split(":")[1]);
-		 var a = depTime.split(":")[0] + ":" + depTime.split(":")[1];
-		 console.log("umrecu " + depTime);*/
-		 
-//
-		
-	//	getScreenings();
-		
 		console.log(dateFrom);
 	});
 	$("#dateTo").on("change", function(e){
@@ -108,7 +87,6 @@ $(document).ready(function(e){
 		var movieSearch = $("#movieSearch").val();
 		var screentypeSearch = $("#screentypeSearch").find(":selected").val();
 		var auditoriumSearch = $("#auditoriumSearch").find(":selected").val();
-		var ticketPriceSearch = $("#ticketPriceSearch").val();
 		var sortBy = $('#sortByScr').find(":selected").val();
 		var ticketPrice1 = $("#ticketPrice1").val();
 		var ticketPrice2 = $("#ticketPrice2").val();
@@ -117,7 +95,6 @@ $(document).ready(function(e){
 			movieSearch : movieSearch,
 			screentypeSearch : screentypeSearch,
 			auditoriumSearch : auditoriumSearch,
-			ticketPriceSearch : ticketPriceSearch,
 			dateFrom : dateFrom,
 			dateTo : dateTo,
 			ticketPrice1 : ticketPrice1,
@@ -161,9 +138,12 @@ $(document).ready(function(e){
 	$("#auditoriumSearch").change(function(e){
 		getScreenings();
 	});	
-	/*$("#ticketPriceSearch").change(function(e){
-		getMovies();
-	});*/	
+	$("#ticketPrice1").change(function(e){
+		getScreenings();
+	});
+	$("#ticketPrice2").change(function(e){
+		getScreenings();
+	});
 	$("#sortByScr").change(function(e){
 		getScreenings();
 	});

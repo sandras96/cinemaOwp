@@ -187,9 +187,7 @@ $(document).ready(function (e){
 			success : function(response){
 				console.log(response)
 				if(response.status == "success"){
-					
 					initScreenings(response.screeningsForMovie);
-					console.log(response.screeningsForMovie + "za film")
 				}else{
 					alert(response.message)
 				}

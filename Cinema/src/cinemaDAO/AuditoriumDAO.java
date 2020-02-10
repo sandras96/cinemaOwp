@@ -158,8 +158,8 @@ public class AuditoriumDAO {
 					"where ast.screenTypeId = ? and a.id not in ( " + 
 					"    select s.auditoriumId from screening s " + 
 					"        left outer join movie m on s.movieId = m.id " + 
-					"    where s.datetime > ? and s.datetime < ? and " + 
-					"    (" + 
+		//			"    where s.datetime > ? and s.datetime < ? and " + 
+					"   where (" + 
 					"         (? > s.datetime and ? < (s.datetime + m.duration*60000)) or " + 
 					"          (? > s.datetime and ? < (s.datetime + m.duration*60000)) " + 
 					"    )" + 
@@ -168,12 +168,12 @@ public class AuditoriumDAO {
 			ps = conn.prepareStatement(query);
 			System.out.println("kveri za datume je " + query);
 			ps.setInt(1, screntypeId);
-			ps.setLong(2, dateStart);
-			ps.setLong(3, dateEnd);
-			ps.setLong(4, datetime);
-			ps.setLong(5, datetime);
-			ps.setLong(6, movieEnd);
-			ps.setLong(7, movieEnd);
+		//	ps.setLong(2, dateStart);
+		//	ps.setLong(3, dateEnd);
+			ps.setLong(2, datetime);
+			ps.setLong(3, datetime);
+			ps.setLong(4, movieEnd);
+			ps.setLong(5, movieEnd);
 			
 			System.out.println(ps);
 

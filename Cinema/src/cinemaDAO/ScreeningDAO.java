@@ -16,7 +16,7 @@ import model.User;
 public class ScreeningDAO {
 
 	public static List<Screening> getAll(String movieParam, String scrtypeParam,
-			String auditParam, long dateFrom, long dateTo, String sortBy) throws Exception {
+			String auditParam, long dateFrom, long dateTo, double price1, double price2, String sortBy) throws Exception {
 
 		Connection conn = ConnectionManager.getConnection();
 		List<Screening> screenings = new ArrayList<>();
@@ -40,8 +40,10 @@ public class ScreeningDAO {
 					"    sct.name like ? and" + 
 					"    m.title like ? and "+
 					"	 scr.deleted = 0 and "+
-					"	 scr.datetime > ? and " + // datum od
-					"	 scr.datetime < ? " +     // datum do
+					"	 scr.datetime > ? and " + 
+					"	 scr.datetime < ? and " + 
+					"	 scr.ticketPrice >= ? and "+
+					"    scr.ticketPrice <= ? "+
 					"    order by " + orderBy + ";";
 			
 			ps = conn.prepareStatement(query);
@@ -50,6 +52,8 @@ public class ScreeningDAO {
 			ps.setString(3, movieParam);
 			ps.setLong(4, dateFrom);
 			ps.setLong(5, dateTo);
+			ps.setDouble(6, price1);
+			ps.setDouble(7, price2);
 		
 			rs = ps.executeQuery();
 			System.out.println("kveri je " + query + "order by je "+ orderBy);
@@ -138,11 +142,11 @@ public class ScreeningDAO {
 		
 		
 		try {
-			String query = "select * from screening s where movieId = ? and deleted = 0 and datetime > ? and s.auditoriumId in " + 
-					"    (select distinct s.auditoriumId from seat s where s.id not in " + 
-					"    (select t.seatId from ticket t left outer join screening s on t.screeningId = s.id " + 
-					"    left outer join seat se on se.id = t.seatId))" + 
-					"    order by datetime;";
+			String query = "select * from screening s where movieId = ? and deleted = 0 and s.datetime > ? and s.auditoriumId in " + 
+					"    (select distinct se.auditoriumId from seat se where se.id not in " + 
+					"    (select t.seatId from ticket t left outer join screening sc on t.screeningId = sc.id " + 
+					"    left outer join seat sea on sea.id = t.seatId where sc.id=s.id))" + 
+					"    order by s.datetime;";
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, movieId);
 			ps.setLong(2, date);
@@ -251,7 +255,6 @@ public class ScreeningDAO {
 			}
 		}
 	}
-	
 	
 	
 

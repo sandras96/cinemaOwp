@@ -20,7 +20,7 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "select * from movie";
+			String query = "select * from movie where deleted = 0";
 			ps = conn.prepareStatement(query);
 
 			rs = ps.executeQuery();
@@ -63,8 +63,8 @@ public class MovieDAO {
 		return movies;
 
 	}
-	public static List<Movie> getAllParam(String titleParam, String genreParam, String distributorParam,
-											String countryParam, String sortBy) throws Exception {
+	public static List<Movie> getAllParam(String titleParam, String genreParam, int durationParamMin, int durationParamMax,
+			String distributorParam, String countryParam, int yearParamMin, int yearParamMax, String sortBy) throws Exception {
 		
 		Connection conn = ConnectionManager.getConnection();
 		List<Movie> movies = new ArrayList<Movie>();
@@ -79,17 +79,23 @@ public class MovieDAO {
 				orderBy = sortBy;
 			}
 			String query = "select * from movie where title like ?"+
-												" and genre like ? "+
-												 "and distributor like ?"+
-												 " and country like ?"+
-												 " and deleted = 0 " +
-												 "order by " + orderBy + ";"  ;
+													" and genre like ? "+
+													" and duration between ? and ? "+
+													" and distributor like ?"+
+													" and country like ?" +
+													" and year between ? and ? " +
+													" and deleted = 0 " +
+													" order by " + orderBy + ";"  ;
 			
 			ps = conn.prepareStatement(query);
 			ps.setString(1, titleParam);
 			ps.setString(2, genreParam);
-			ps.setString(3, distributorParam);
-			ps.setString(4, countryParam);
+			ps.setInt(3, durationParamMin);
+			ps.setInt(4, durationParamMax);
+			ps.setString(5, distributorParam);
+			ps.setString(6, countryParam);
+			ps.setInt(7, yearParamMin);
+			ps.setInt(8, yearParamMax);
 			rs = ps.executeQuery();
 
 			System.out.println("kveri je " + query + "order by je "+ orderBy);
@@ -140,7 +146,7 @@ public class MovieDAO {
 		ResultSet rs = null;
 		try {
 
-			String query = "select * from movie where deleted = 0 and id = ?";
+			String query = "select * from movie where id = ?";
 
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, id);

@@ -6,6 +6,8 @@ $(document).ready(function(e){
 	
 	var usrDiv = $('#usrContainer');
 
+	var ticketsDiv = $("#ticketsDiv");
+	
 	var liUsers = $('#liUsers');
 	liUsers.hide();
 	var deleteUserBtn = $('#deleteUserBtn');
@@ -25,7 +27,7 @@ $(document).ready(function(e){
 	
 	
 	getUser();
-	
+	getTickets();
 	
 	function initUser(u, loggedInUser){
 		var username = $('<h4><b>Username: </b>'+u.username+'</h4> ');
@@ -135,6 +137,85 @@ $(document).ready(function(e){
 	});
 	
 	
+	function getTickets(){
+		var params = $.param({
+			username : username
+		});
+		$.ajax({
+			url : 'TicketsForUserServlet',
+			method : 'GET',
+			dataType: 'json',
+			data: params,
+			success : function(response){
+				if(response.status == "success"){
+					initTickets(response.tickets);
+				}else{
+					alert(response.message);
+				}
+			},
+			error: function(request, message, error){
+				alert(error);
+			}	
+			
+			
+			
+		});
+		
+	}
+	
+	function initTickets(tickets){
+		ticketsDiv.empty();
+		for (var i = 0; i < tickets.length; i++) {
+			appendTickets(tickets[i]);
+		}
+	}
+	function appendTickets(t){
+		var tableRow= $('<tr></tr>');
+		var title = $('<td><a href="/Cinema/singleMovie.html?id='+t.screening.movie.id+'"</a>'+t.screening.movie.title+'</div>');
+		var datetimeScr = $('<td>'+formatDate(new Date(t.screening.datetime))+'</td>');
+		var screenType = $('<td> '+t.screening.screentype.name+'</td>');
+		var auditorium = $('<td>'+t.screening.auditorium.name+'</td>');
+		var ticketPrice = $('<td>'+t.screening.ticketPrice+'</td>');
+		var datetimeTicket = $('<td> '+formatDate(new Date(t.datetime))+'</td>');
+		var deleteTicket = $('<td><button id="deleteTicket' + t.id +'" value="' + t.id + '" type="button">delete ticket </button></td>');
+
+		tableRow.append(title);
+		tableRow.append(datetimeScr);
+		tableRow.append(screenType);
+		tableRow.append(auditorium);
+		tableRow.append(ticketPrice);
+		tableRow.append(datetimeTicket);
+		tableRow.append(deleteTicket);
+	
+		ticketsDiv.append(tableRow);
+		var deleteTicketId = "#deleteTicket" + t.id;
+		$(deleteTicketId).click(function(e){
+			var ticketId = $(this).val();
+			var params = $.param({
+				ticketId : ticketId,
+			});
+			$.ajax({
+				url: 'TicketsForUserServlet',
+				method: 'POST',
+				dataType: 'json',
+				data : params,
+				success: function(response){
+					if(response.status =="success"){
+						alert(response.message);
+					}else{
+						alert(response.message);
+					}
+				},
+				error: function(request, message, error){
+					alert(error);
+				}	
+			
+			});
+			
+			
+		});
+		
+	}
 	
 	
 });

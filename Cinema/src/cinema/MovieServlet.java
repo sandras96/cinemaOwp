@@ -2,6 +2,7 @@ package cinema;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -13,9 +14,10 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaDAO.MovieDAO;
-import cinemaDAO.UserDAO;
+import cinemaDAO.ScreeningDAO;
 import cinemaDAO.Util;
 import model.Movie;
+import model.Screening;
 import model.User;
 import model.User.Role;
 
@@ -113,6 +115,16 @@ public class MovieServlet extends HttpServlet {
 				if (loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
 					throw new Exception("Access denied");
 				}else {
+					if("".equals(title) || "".equals(directors) || "".equals(actors) || "".equals(genre) || 
+							"".equals(duration) || "".equals(distributor) || "".equals(country) || "".equals(year) || "".equals(description) ) {
+							throw new Exception("Please fill all the fields");
+						}
+						if (!Util.isNumeric(year)) {
+							throw new Exception("Please put number for year");
+						}
+						if(!Util.isNumeric(duration)) {
+							throw new Exception("Please put number for duration");
+						}
 					movie.setTitle(title);
 					movie.setDirectors(directors);
 					movie.setActors(actors);
@@ -147,10 +159,19 @@ public class MovieServlet extends HttpServlet {
 					throw new Exception("Access denied!");
 				}else {
 					
-				if(!MovieDAO.deleteMovie(Integer.parseInt(idMovie))) {
+					
+				List<Screening> movieScreenings = ScreeningDAO.getByMovieId(Integer.parseInt(idMovie), 0);	
+				if(movieScreenings.isEmpty()) {
+					if(!MovieDAO.deleteMovie(Integer.parseInt(idMovie))) {
+						throw new Exception("error");
+					}
+				}else {
 					movie1.setDeleted(true);
-					MovieDAO.updateMovie(movie1);
+					if(!MovieDAO.updateMovie(movie1)) {
+						throw new Exception("error");
+					}
 				}
+				
 				}
 				
 				status = "success";

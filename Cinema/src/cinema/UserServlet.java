@@ -2,6 +2,7 @@ package cinema;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -9,11 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cinemaDAO.TicketDAO;
 import cinemaDAO.UserDAO;
+import model.Ticket;
 import model.User;
 import model.User.Role;
 
@@ -170,11 +172,19 @@ public class UserServlet extends HttpServlet {
 					if(loggedInUser.getUsername().equals(user1.getUsername())) {
 						throw new Exception("Access denied!");
 					}else {
-						
-					if (!UserDAO.delete(username)) {
+					List<Ticket> tickets = TicketDAO.getAllByUsername(user1.getUsername());	
+					if(tickets.isEmpty()) {
+						if(!UserDAO.delete(user1.getUsername())){
+							throw new Exception("error");
+						}
+					}else {
 						user1.setDeleted(true);
-						UserDAO.updateUser(user1);
+						if(!UserDAO.updateUser(user1)) {
+							throw new Exception("error");
+						}
+
 					}
+					
 					getServletContext().removeAttribute(user1.getUsername());
 					
 					}
