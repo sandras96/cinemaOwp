@@ -39,7 +39,11 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
 
 		String username = request.getParameter("usr");
 		User user = null;
@@ -94,7 +98,12 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		String action = request.getParameter("action");
 		String select = request.getParameter("select");
 		String newPass = request.getParameter("newPass");
@@ -166,6 +175,8 @@ public class UserServlet extends HttpServlet {
 						user1.setDeleted(true);
 						UserDAO.updateUser(user1);
 					}
+					getServletContext().removeAttribute(user1.getUsername());
+					
 					}
 				status = "success";
 				message = "Uspesno";

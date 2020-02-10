@@ -39,7 +39,12 @@ public class UsersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		List<User> users = new ArrayList<>();
 		
 		String usernameSearch = Util.createParam(request.getParameter("usernameSearch"));

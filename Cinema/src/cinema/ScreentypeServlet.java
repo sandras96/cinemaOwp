@@ -38,8 +38,6 @@ public class ScreentypeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		List<ScreenType> screentypes = new ArrayList<>();
 		
 		String message = "";

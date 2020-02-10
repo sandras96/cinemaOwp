@@ -43,7 +43,10 @@ public class AuditoriumServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String idScreenType = request.getParameter("idScreenType");
+		String movieId = request.getParameter("movieId");
+		
 		long datetime = Long.parseLong(request.getParameter("datetime"));
+//		? long dateEnd, long movieEnd
 		
 		System.out.println("datetime sa fronta je " + datetime);
 		
@@ -56,13 +59,21 @@ public class AuditoriumServlet extends HttpServlet {
 		
 		try {
 			
-			Calendar calendar = FormatDate.dateToCalendar(date);
-			long datetimeStart = ((calendar).getTime()).getTime();
-			
-			if(idScreenType != null) {
-				
-				auditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(idScreenType), datetime, datetimeStart);
+			if(idScreenType == null || movieId == null) {
+				throw new Exception("invalid params");
 			}
+			
+			Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
+			
+			long duration = movie.getDuration() * 60000 + datetime;
+			
+			Calendar calendar = FormatDate.dateToCalendar(date);
+			Calendar calendar2 = FormatDate.dateEndCalendar(date);
+			
+			long datetimeStart = ((calendar).getTime()).getTime();
+			long datetimeEnd = ((calendar2).getTime()).getTime();
+			
+			auditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(idScreenType), datetime, datetimeStart, datetimeEnd, duration);
 			
 			message = "uspesno";
 			status = "success";

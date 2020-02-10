@@ -70,7 +70,8 @@ public class RegistrationServlet extends HttpServlet {
 			UserDAO.createUser(newUser);
 			
 			HttpSession session = request.getSession();
-			session.setAttribute("loggedInUser", newUser);
+			session.setAttribute("loggedInUsername", newUser.getUsername());
+			getServletContext().setAttribute(newUser.getUsername(), newUser);
 			
 			System.out.println("User je " + newUser.getUsername());
 			

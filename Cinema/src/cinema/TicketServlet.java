@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -42,7 +43,6 @@ public class TicketServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		String movieId = request.getParameter("movieId");
 		long date = new Date().getTime();
 		List<Screening> screeningsForMovie = new ArrayList<>();
@@ -85,7 +85,13 @@ public class TicketServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		User loggedUser = (User) request.getSession().getAttribute("loggedInUser");
+		HttpSession session = request.getSession();
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		String seatsParam = request.getParameter("seats");
 		String auditoriumId = request.getParameter("auditoriumId");
 		String screeningId = request.getParameter("screeningId");
@@ -97,7 +103,7 @@ public class TicketServlet extends HttpServlet {
 			if (seatsParam == null) {
 				throw new Exception("seat is not provided");
 			}
-			if (loggedUser == null) {
+			if (loggedInUser == null) {
 				throw new Exception("access denied");
 			}
 			Screening screening = ScreeningDAO.getById(Integer.parseInt(screeningId));
@@ -116,7 +122,7 @@ public class TicketServlet extends HttpServlet {
 					throw new Exception("seat is not available");
 				}
 				Ticket ticket = new Ticket();
-				ticket.setUser(loggedUser);
+				ticket.setUser(loggedInUser);
 				ticket.setScreening(screening);
 				ticket.setDatetime(new Date());
 				ticket.setSeat(SeatDAO.getById(seatid));

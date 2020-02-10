@@ -52,7 +52,12 @@ public class ScreeningsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User)session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		List<Screening> screenings = new ArrayList<>();
 		
 		List<Movie> movies = new ArrayList<>();
@@ -119,7 +124,11 @@ public class ScreeningsServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		User loggedInUser = (User)session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
 		
 		String movieId = request.getParameter("movieId");
 		String auditoriumId = request.getParameter("auditoriumId");
@@ -150,7 +159,12 @@ public class ScreeningsServlet extends HttpServlet {
 			}
 			Movie movie = MovieDAO.getById(Integer.parseInt(movieId));
 			Auditorium auditorium = AuditoriumDAO.getById(Integer.parseInt(auditoriumId));
-			List<Auditorium> freeauditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(screentypeId), datetime, datetimeStart);
+			
+			Calendar calendar2 = FormatDate.dateEndCalendar(date);
+			long datetimeEnd = ((calendar2).getTime()).getTime();
+			long movieEnd = movie.getDuration() * 60000 + date.getTime();
+			
+			List<Auditorium> freeauditoriums = AuditoriumDAO.getAllFreeAuditoriums(Integer.parseInt(screentypeId), datetime, datetimeStart, datetimeEnd, movieEnd);
 			boolean validAuditorium = false;
 			for (Auditorium a : freeauditoriums) {
 				if(auditorium.getId() == a.getId()) {

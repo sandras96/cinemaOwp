@@ -212,7 +212,7 @@ $(document).ready(function(e){
 			var params = $.param({
 				idScreenType : idScrtype,
 				datetime : datetime,
-				movie : movie,
+				movieId : movie,
 			}) ; 
 			console.log("params " + params)
 			$.ajax({

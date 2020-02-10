@@ -25,6 +25,7 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		getServletContext().removeAttribute((String)request.getSession().getAttribute("loggedInUsername"));
 		request.getSession().invalidate();
 		response.sendRedirect("/Cinema/index.html");
 		System.out.println("logout");

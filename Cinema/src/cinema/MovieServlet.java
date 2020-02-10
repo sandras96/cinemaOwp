@@ -39,7 +39,12 @@ public class MovieServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		String movieId = request.getParameter("id");
 		
 		Movie movie = null;
@@ -77,7 +82,12 @@ public class MovieServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User)session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		String idMovie = request.getParameter("id");
 		String title = request.getParameter("titleInput");
 		String directors = request.getParameter("directorsInput");
@@ -131,7 +141,7 @@ public class MovieServlet extends HttpServlet {
 				break;
 				
 				
-			case "delete" :
+			case "delete" ://update movie set deleted true
 				Movie movie1 = MovieDAO.getById(Integer.parseInt(idMovie));
 				if(loggedInUser == null || loggedInUser.getRole() != User.Role.ADMIN) {
 					throw new Exception("Access denied!");

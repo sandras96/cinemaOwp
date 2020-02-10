@@ -144,7 +144,7 @@ public class AuditoriumDAO {
 
 	}
 	
-	public static List<Auditorium> getAllFreeAuditoriums(Integer screntypeId, long datetime, long dateStart ) throws Exception {
+	public static List<Auditorium> getAllFreeAuditoriums(Integer screntypeId, long datetime, long dateStart, long dateEnd, long movieEnd ) throws Exception {
 		Connection conn = ConnectionManager.getConnection();
 		List<Auditorium> auditoriums = new ArrayList<>();
 
@@ -153,21 +153,27 @@ public class AuditoriumDAO {
 
 		try {
 			System.out.println("adtum je " + datetime);
-			String query = "select a.* from auditorium a " + 
-											"left outer join audScrType ast on a.id = ast.auditoriumId " + 
-											"where ast.screenTypeId = ? and a.id not in " + 
-											"(select distinct s.auditoriumId from screening s " + 
-											"left outer join audScrType ast on ast.screenTypeId = s.screenTypeId " + 
-											"left outer join movie m on s.movieId = m.id " + 
-											"where s.datetime > ? and "+
-											"((s.datetime + m.duration*60000) > ?));"; 
+			String query = "select distinct a.* from auditorium a " + 
+					"left outer join audScrType ast on a.id = ast.auditoriumId " + 
+					"where ast.screenTypeId = ? and a.id not in ( " + 
+					"    select s.auditoriumId from screening s " + 
+					"        left outer join movie m on s.movieId = m.id " + 
+					"    where s.datetime > ? and s.datetime < ? and " + 
+					"    (" + 
+					"         (? > s.datetime and ? < (s.datetime + m.duration*60000)) or " + 
+					"          (? > s.datetime and ? < (s.datetime + m.duration*60000)) " + 
+					"    )" + 
+					");"; 
 
 			ps = conn.prepareStatement(query);
 			System.out.println("kveri za datume je " + query);
 			ps.setInt(1, screntypeId);
 			ps.setLong(2, dateStart);
-			//ps.setInt(3, screntypeId);
-			ps.setLong(3, datetime);
+			ps.setLong(3, dateEnd);
+			ps.setLong(4, datetime);
+			ps.setLong(5, datetime);
+			ps.setLong(6, movieEnd);
+			ps.setLong(7, movieEnd);
 			
 			System.out.println(ps);
 

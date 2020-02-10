@@ -31,6 +31,19 @@ public class FormatDate {
 		return calendar;
 
 	}
+	
+	public static Calendar dateEndCalendar(Date date) {
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		return calendar;
+
+	}
 
 	public static Date calendarToDate(Calendar calendar) {
 		return calendar.getTime();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -56,11 +57,11 @@ public class LoginServlet extends HttpServlet {
 			if(!user.getPassword().equals(password)) {
 				throw new Exception("Wrong password");
 			}
-			/*if(user.isDeleted()) {
-				throw new Exception("User deleted!"); ???????
-			}*/
+			
 			HttpSession session = request.getSession();
-			session.setAttribute("loggedInUser", user);
+			session.setAttribute("loggedInUsername", username);
+			
+			getServletContext().setAttribute(username, user);
 			
 			System.out.println("Logovani user je:" + user.getUsername() + user.getPassword());
 			message = "uspesno";

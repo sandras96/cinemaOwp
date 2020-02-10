@@ -40,7 +40,12 @@ public class Movies2Servlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		List<Movie> movies = new ArrayList<>();
 		
 		String titleSearch = Util.createParam(request.getParameter("titleSearch"));
@@ -84,7 +89,12 @@ public class Movies2Servlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		User loggedInUser = (User)session.getAttribute("loggedInUser");
+		String loggedInUsername = (String) session.getAttribute("loggedInUsername");
+		User loggedInUser = null;
+		if (loggedInUsername != null) {
+			loggedInUser = (User) getServletContext().getAttribute(loggedInUsername);
+		}
+		
 		String title = request.getParameter("titleInput");
 		String directors = request.getParameter("directorsInput");
 		String actors = request.getParameter("actorsInput");
@@ -103,6 +113,9 @@ public class Movies2Servlet extends HttpServlet {
 		try {
 			switch (action) {
 			case "create":
+				if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
+					throw new Exception("Access denied!");
+				}
 				if("".equals(title) || "".equals(directors) || "".equals(actors) || "".equals(genre) || 
 					"".equals(duration) || "".equals(distributor) || "".equals(country) || "".equals(year) || "".equals(description) ) {
 					throw new Exception("Please fill all the fields");
@@ -113,9 +126,7 @@ public class Movies2Servlet extends HttpServlet {
 				if(!Util.isNumeric(duration)) {
 					throw new Exception("Please put number for duration");
 				}
-				if(loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
-					throw new Exception("Access denied!");
-				}else {
+				
 					newMovie = new Movie();
 					newMovie.setTitle(title);
 					newMovie.setDirectors(directors);
@@ -129,7 +140,7 @@ public class Movies2Servlet extends HttpServlet {
 					MovieDAO.createMovie(newMovie);
 					System.out.println("Novi film je" + newMovie.getTitle() + "id novog filma je " + newMovie.getId());
 					
-				}
+				
 				
 				message = "uspesno";
 				status = "success";
